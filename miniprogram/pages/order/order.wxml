@@ -1,0 +1,46 @@
+<view class="container">
+  <view class="order-header">
+    <text class="header-title">确认订单</text>
+    <text class="table-tag">🪑 桌号：{{tableNo}}</text>
+  </view>
+
+  <scroll-view class="order-scroll" scroll-y>
+    <view class="order-section">
+      <text class="section-title">商品明细</text>
+      <view class="order-list">
+        <view wx:for="{{items}}" wx:key="id" class="order-item">
+          <image class="item-image" src="{{item.image || '/images/default.png'}}" mode="aspectFill" />
+          <view class="item-info">
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-flavor" wx:if="{{item.flavor}}">{{item.flavor}}</text>
+            <view class="item-bottom">
+              <text class="item-price">¥{{item.price}}</text>
+              <text class="item-quantity">×{{item.quantity}}</text>
+            </view>
+          </view>
+          <text class="item-subtotal">¥{{item.price * item.quantity}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="order-section">
+      <text class="section-title">备注</text>
+      <input 
+        class="remark-input" 
+        placeholder="如有特殊要求，请在此备注（如：少辣、加急等）"
+        value="{{remark}}"
+        bindinput="inputRemark"
+      />
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view class="total-wrap">
+      <text class="total-label">合计：</text>
+      <text class="total-price">¥{{total}}</text>
+    </view>
+    <view class="submit-btn" bindtap="submitOrder">
+      <text>提交订单</text>
+    </view>
+  </view>
+</view>

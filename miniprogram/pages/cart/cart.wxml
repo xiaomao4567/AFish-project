@@ -1,0 +1,50 @@
+<view class="container">
+  <view class="header">
+    <view class="header-left">
+      <text class="header-title">购物车</text>
+      <text class="header-subtitle" wx:if="{{tableNo}}">桌号：{{tableNo}}</text>
+    </view>
+    <view class="header-right" bindtap="clearCart" wx:if="{{items.length > 0}}">
+      <text class="clear-btn">清空</text>
+    </view>
+  </view>
+
+  <scroll-view class="cart-scroll" scroll-y>
+    <view class="empty-cart" wx:if="{{items.length === 0}}">
+      <text class="empty-icon">🛒</text>
+      <text class="empty-text">购物车是空的</text>
+      <text class="empty-hint">快去挑选美味菜品吧</text>
+    </view>
+
+    <view class="cart-list" wx:else>
+      <view wx:for="{{items}}" wx:key="id" class="cart-item">
+        <image class="item-image" src="{{item.image || '/images/default.png'}}" mode="aspectFill" />
+        <view class="item-info">
+          <text class="item-name">{{item.name}}</text>
+          <text class="item-flavor" wx:if="{{item.flavor}}">口味：{{item.flavor}}</text>
+          <view class="item-bottom">
+            <text class="item-price">¥{{item.price}}</text>
+            <view class="quantity-wrap">
+              <view class="qty-btn" data-index="{{index}}" data-delta="-1" bindtap="updateQuantity">−</view>
+              <text class="qty-value">{{item.quantity}}</text>
+              <view class="qty-btn" data-index="{{index}}" data-delta="1" bindtap="updateQuantity">+</view>
+            </view>
+            <text class="item-subtotal">¥{{item.price * item.quantity}}</text>
+          </view>
+        </view>
+        <view class="delete-btn" data-index="{{index}}" bindtap="deleteItem">×</view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar" wx:if="{{items.length > 0}}">
+    <view class="total-info">
+      <text class="total-label">合计：</text>
+      <text class="total-price">¥{{total}}</text>
+      <text class="total-count">共{{count}}件</text>
+    </view>
+    <view class="order-btn" bindtap="goOrder">
+      <text>去下单</text>
+    </view>
+  </view>
+</view>

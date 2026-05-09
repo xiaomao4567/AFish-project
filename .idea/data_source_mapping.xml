@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourcePerFileMappings">
+    <file url="file://$APPLICATION_CONFIG_DIR$/consoles/db/536c82e0-bb21-4916-a570-314ae058b45a/console.sql" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/CartItemMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/CartMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/CategoryMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/ComboItemMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/ComboMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/DishMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/EmployeeMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/OrderItemMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/OrderMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/DishMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+  </component>
+</project>

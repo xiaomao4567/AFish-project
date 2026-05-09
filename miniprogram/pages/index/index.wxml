@@ -1,0 +1,133 @@
+<view class="container">
+  <view class="header">
+    <view class="header-left">
+      <text class="greeting">Hi, {{username}}</text>
+      <text class="title">🍲 鱼你在一起</text>
+    </view>
+    <view class="header-right" bindtap="logout">
+      <text class="logout-btn">退出</text>
+    </view>
+  </view>
+
+  <view class="table-section" wx:if="{{!tableNo}}" bindtap="showTableModal">
+    <view class="table-card">
+      <text class="table-icon">🪑</text>
+      <text class="table-text">请选择桌号</text>
+    </view>
+  </view>
+
+  <view class="table-tag" wx:else>
+    <text class="table-text">🪑 桌号：{{tableNo}}</text>
+  </view>
+
+  <view class="search-bar">
+    <input 
+      class="search-input" 
+      placeholder="搜索菜品..." 
+      value="{{searchKeyword}}" 
+      bindinput="search"
+    />
+    <text class="search-icon">🔍</text>
+  </view>
+
+  <scroll-view class="category-scroll" scroll-x>
+    <view class="category-list">
+      <view 
+        wx:for="{{categories}}" 
+        wx:key="id" 
+        class="category-item {{activeCategory === index ? 'active' : ''}}"
+        bindtap="switchCategory"
+        data-index="{{index}}"
+      >
+        <text class="category-icon">{{item.icon}}</text>
+        <text class="category-name">{{item.name}}</text>
+      </view>
+    </view>
+  </scroll-view>
+
+  <scroll-view class="content-scroll" scroll-y>
+    <view class="dish-grid" wx:if="!showCombos">
+      <view 
+        wx:for="{{dishes}}" 
+        wx:key="id" 
+        class="dish-card"
+        bindtap="goDetail"
+        data-item="{{item}}"
+        data-is-combo="false"
+      >
+        <image class="dish-image" src="{{item.image}}" mode="aspectFill" />
+        <view class="dish-info">
+          <text class="dish-name">{{item.name}}</text>
+          <text class="dish-desc">{{item.description}}</text>
+          <view class="dish-bottom">
+            <text class="dish-price">¥{{item.price}}</text>
+            <text class="dish-flavor" wx:if="{{item.flavors}}">{{item.flavors.split(',')[0]}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="combo-list" wx:else>
+      <view 
+        wx:for="{{combos}}" 
+        wx:key="id" 
+        class="combo-card"
+        bindtap="goDetail"
+        data-item="{{item}}"
+        data-is-combo="true"
+      >
+        <image class="combo-image" src="{{item.image}}" mode="aspectFill" />
+        <view class="combo-info">
+          <text class="combo-name">{{item.name}}</text>
+          <text class="combo-desc">{{item.description}}</text>
+          <view class="combo-items">
+            <text wx:for="{{item.items}}" wx:key="index" class="combo-item">
+              {{item.name}}×{{item.quantity}}
+            </text>
+          </view>
+          <view class="combo-bottom">
+            <text class="combo-price">¥{{item.price}}</text>
+            <text class="combo-tag">超值套餐</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="loading-more" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+
+    <view class="empty-state" wx:if="!loading && dishes.length === 0 && !showCombos && categories.length > 0">
+      <text class="empty-icon">🍽️</text>
+      <text class="empty-text">暂无菜品</text>
+    </view>
+  </scroll-view>
+
+  <view class="cart-btn" bindtap="goCart">
+    <view class="cart-icon-wrap">
+      <text class="cart-icon">🛒</text>
+      <view class="cart-badge" wx:if="{{cartCount > 0}}">{{cartCount}}</view>
+    </view>
+    <text class="cart-text">购物车</text>
+  </view>
+
+  <view class="table-modal" wx:if="{{showTableModal}}" bindtap="hideTableModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">选择桌号</text>
+        <view class="modal-close" bindtap="hideTableModal">×</view>
+      </view>
+      <view class="table-grid">
+        <view 
+          wx:for="{{tableList}}" 
+          wx:key="item" 
+          class="table-item"
+          bindtap="selectTable"
+          data-table="{{item}}"
+        >
+          <text>{{item}}号桌</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

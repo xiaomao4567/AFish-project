@@ -1,0 +1,62 @@
+<view class="container" wx:if="{{item}}">
+  <scroll-view class="content-scroll" scroll-y>
+    <image class="detail-image" src="{{item.image || '/images/default.png'}}" mode="aspectFill" />
+    
+    <view class="detail-info">
+      <view class="detail-header">
+        <text class="detail-name">{{item.name}}</text>
+        <text class="detail-tag" wx:if="{{isCombo}}">套餐</text>
+      </view>
+      
+      <view class="detail-price">
+        <text class="price-symbol">¥</text>
+        <text class="price-value">{{item.price}}</text>
+      </view>
+
+      <text class="detail-desc">{{item.description || '暂无描述'}}</text>
+
+      <view wx:if="{{!isCombo && flavors.length > 0}}" class="flavor-section">
+        <text class="section-title">可选口味</text>
+        <view class="flavor-list">
+          <view 
+            wx:for="{{flavors}}" 
+            wx:key="*this"
+            class="flavor-item {{selectedFlavor === item ? 'active' : ''}}"
+            data-flavor="{{item}}"
+            bindtap="selectFlavor"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{isCombo && item.items && item.items.length > 0}}" class="items-section">
+        <text class="section-title">套餐包含</text>
+        <view class="items-list">
+          <view wx:for="{{item.items}}" wx:key="dishId" class="item-row">
+            <text class="item-name">{{item.dishName}}</text>
+            <text class="item-quantity">×{{item.quantity}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="quantity-section">
+        <text class="section-title">数量</text>
+        <view class="quantity-control">
+          <view class="qty-btn" bindtap="minusQuantity">−</view>
+          <text class="qty-value">{{quantity}}</text>
+          <view class="qty-btn" bindtap="plusQuantity">+</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="bottom-bar">
+    <view class="table-info" wx:if="{{tableNo}}">
+      🪑 桌号：{{tableNo}}
+    </view>
+    <view class="add-btn" bindtap="addToCart">
+      <text>加入购物车</text>
+    </view>
+  </view>
+</view>

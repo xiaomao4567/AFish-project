@@ -1,0 +1,42 @@
+<view class="container">
+  <view class="logo">
+    <text class="logo-icon">🍽️</text>
+    <text class="logo-title">AFish 餐饮</text>
+    <text class="logo-subtitle">新鲜美味，用心烹饪</text>
+  </view>
+
+  <view class="login-form">
+    <view class="form-item">
+      <text class="form-label">用户名</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入用户名" 
+        value="{{username}}"
+        bindinput="inputUsername"
+      />
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">密码</text>
+      <input 
+        class="form-input" 
+        placeholder="请输入密码" 
+        type="password"
+        value="{{password}}"
+        bindinput="inputPassword"
+      />
+    </view>
+
+    <view class="login-btn" bindtap="login" :class="{ loading: loading }">
+      <text>{{ loading ? '登录中...' : '登录' }}</text>
+    </view>
+
+    <view class="guest-btn" bindtap="guestLogin">
+      <text>游客登录</text>
+    </view>
+  </view>
+
+  <view class="footer">
+    <text>测试账号：admin / 123456</text>
+  </view>
+</view>

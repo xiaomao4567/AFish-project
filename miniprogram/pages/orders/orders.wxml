@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="header">
+    <text class="header-title">我的订单</text>
+    <text class="table-tag" wx:if="{{tableNo}}">🪑 桌号：{{tableNo}}</text>
+  </view>
+
+  <view class="empty-order" wx:if="{{!loading && orders.length === 0}}">
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">暂无订单</text>
+    <text class="empty-hint" wx:if="{{!tableNo}}">请先扫描桌码进入</text>
+  </view>
+
+  <scroll-view 
+    class="order-scroll" 
+    scroll-y 
+    wx:if="{{orders.length > 0}}"
+    bindrefresherrefresh="refreshOrders"
+    refresher-enabled="true"
+  >
+    <view class="order-list">
+      <view 
+        wx:for="{{orders}}" 
+        wx:key="id" 
+        class="order-card"
+        data-order-no="{{orderNo}}"
+        bindtap="viewDetail"
+      >
+        <view class="order-header">
+          <text class="order-no">订单号：{{orderNo}}</text>
+          <text class="order-status" :class="getStatusClass(status)">
+            {{getStatusText(status)}}
+          </text>
+        </view>
+        
+        <view class="order-items">
+          <view wx:for="{{items}}" wx:for-item="item" wx:key="dishId" class="order-item">
+            <text class="item-name">{{item.dishName || item.name}}</text>
+            <text class="item-quantity">×{{item.quantity}}</text>
+          </view>
+          <text class="more-items" wx:if="{{items.length > 3}}">...等{{items.length}}件商品</text>
+        </view>
+
+        <view class="order-footer">
+          <text class="order-time">{{createTime}}</text>
+          <text class="order-total">¥{{totalAmount}}</text>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载中...</text>
+  </view>
+</view>

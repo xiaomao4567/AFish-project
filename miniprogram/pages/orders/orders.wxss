@@ -1,0 +1,149 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.header {
+  background: #fff;
+  padding: 30rpx;
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.table-tag {
+  font-size: 26rpx;
+  color: #666;
+  margin-top: 10rpx;
+  display: block;
+}
+
+.empty-order {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 150rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 30rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #666;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+.order-scroll {
+  height: calc(100vh - 140rpx);
+}
+
+.order-list {
+  padding: 20rpx;
+}
+
+.order-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.order-no {
+  font-size: 26rpx;
+  color: #666;
+  font-family: monospace;
+}
+
+.order-status {
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.order-status.pending {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.order-status.paid {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.order-status.preparing {
+  background: #e3f2fd;
+  color: #2196f3;
+}
+
+.order-status.served {
+  background: #f3e5f5;
+  color: #9c27b0;
+}
+
+.order-status.completed {
+  background: #f5f5f5;
+  color: #999;
+}
+
+.order-items {
+  border-top: 1rpx solid #f5f5f5;
+  border-bottom: 1rpx solid #f5f5f5;
+  padding: 16rpx 0;
+  margin-bottom: 16rpx;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+  color: #333;
+  padding: 8rpx 0;
+}
+
+.more-items {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+  display: block;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.order-total {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #ff6b6b;
+}
+
+.loading {
+  text-align: center;
+  padding: 40rpx;
+  color: #999;
+}

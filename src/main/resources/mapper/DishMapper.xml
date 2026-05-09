@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.yitiaoyu.server.mapper.DishMapper">
+
+    <resultMap id="DishResultMap" type="com.example.yitiaoyu.pojo.entity.Dish">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="image" property="image"/>
+        <result column="description" property="description"/>
+        <result column="flavors" property="flavors"/>
+        <result column="price" property="price"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="Long" resultMap="DishResultMap">
+        SELECT * FROM dish WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.Dish" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dish (name, category_id, image, description, flavors, price, status, create_time, update_time)
+        VALUES (#{name}, #{categoryId}, #{image}, #{description}, #{flavors}, #{price}, #{status}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.Dish">
+        UPDATE dish 
+        SET name = #{name}, 
+            category_id = #{categoryId}, 
+            image = #{image}, 
+            description = #{description}, 
+            flavors = #{flavors}, 
+            price = #{price}, 
+            status = #{status}, 
+            update_time = #{updateTime} 
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM dish WHERE id = #{id}
+    </delete>
+
+    <select id="selectByCategory" parameterType="Long" resultMap="DishResultMap">
+        SELECT * FROM dish WHERE category_id = #{categoryId} AND status = 1 ORDER BY create_time DESC
+    </select>
+
+    <select id="countByCategory" parameterType="Long" resultType="Integer">
+        SELECT COUNT(*) FROM dish WHERE category_id = #{categoryId}
+    </select>
+
+    <select id="selectByCategoryAll" parameterType="Long" resultMap="DishResultMap">
+        SELECT * FROM dish WHERE category_id = #{categoryId} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByName" parameterType="String" resultMap="DishResultMap">
+        SELECT * FROM dish WHERE name LIKE CONCAT('%', #{name}, '%') ORDER BY create_time DESC
+    </select>
+
+    <select id="selectAll" resultMap="DishResultMap">
+        SELECT * FROM dish ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByCategoryAndName" resultMap="DishResultMap">
+        SELECT * FROM dish 
+        WHERE category_id = #{categoryId} AND name LIKE CONCAT('%', #{name}, '%') 
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>
