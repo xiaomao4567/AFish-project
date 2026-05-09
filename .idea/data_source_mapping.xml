@@ -11,6 +11,13 @@
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/EmployeeMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/OrderItemMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/yitiaoyu/server/mapper/OrderMapper.java" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/CartItemMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/CartMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/CategoryMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/ComboItemMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
     <file url="file://$PROJECT_DIR$/src/main/resources/mapper/DishMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/EmployeeMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/OrderItemMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/mapper/OrderMapper.xml" value="536c82e0-bb21-4916-a570-314ae058b45a" />
   </component>
 </project>

@@ -7,6 +7,7 @@ import com.example.yitiaoyu.pojo.vo.OrderVO;
 import com.example.yitiaoyu.pojo.vo.PageVO;
 import com.example.yitiaoyu.server.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,8 @@ import java.util.List;
 @RequestMapping("/api/order")
 public class OrderController {
 
-    private final OrderService orderService;
-
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+    @Autowired
+    private OrderService orderService;
 
     @PostMapping("/create")
     public Result<OrderVO> create(@RequestBody OrderDTO orderDTO) {
@@ -38,13 +36,11 @@ public class OrderController {
 @RequestMapping("/api/admin/order")
 class OrderAdminController {
 
-    private final OrderService orderService;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private OrderService orderService;
 
-    public OrderAdminController(OrderService orderService, JwtUtil jwtUtil) {
-        this.orderService = orderService;
-        this.jwtUtil = jwtUtil;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping
     public Result<PageVO<OrderVO>> list(@RequestParam(required = false) String status,

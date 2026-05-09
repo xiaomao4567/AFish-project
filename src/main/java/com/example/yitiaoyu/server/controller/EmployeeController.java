@@ -7,19 +7,18 @@ import com.example.yitiaoyu.pojo.vo.EmployeeVO;
 import com.example.yitiaoyu.pojo.vo.PageVO;
 import com.example.yitiaoyu.server.service.EmployeeService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin/employee")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private EmployeeService employeeService;
 
-    public EmployeeController(EmployeeService employeeService, JwtUtil jwtUtil) {
-        this.employeeService = employeeService;
-        this.jwtUtil = jwtUtil;
-    }
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping
     public Result<PageVO<EmployeeVO>> list(@RequestParam(defaultValue = "1") Integer page,

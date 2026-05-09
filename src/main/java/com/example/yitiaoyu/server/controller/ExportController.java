@@ -1,6 +1,7 @@
 package com.example.yitiaoyu.server.controller;
 
 import com.example.yitiaoyu.server.service.ExportService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,11 +19,8 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/api/admin/export")
 public class ExportController {
 
-    private final ExportService exportService;
-
-    public ExportController(ExportService exportService) {
-        this.exportService = exportService;
-    }
+    @Autowired
+    private ExportService exportService;
 
     @GetMapping("/orders")
     public ResponseEntity<byte[]> exportOrders(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,

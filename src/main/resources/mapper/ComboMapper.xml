@@ -5,8 +5,8 @@
     <resultMap id="ComboResultMap" type="com.example.yitiaoyu.pojo.entity.Combo">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
-        <result column="image" property="image"/>
         <result column="description" property="description"/>
+        <result column="image" property="image"/>
         <result column="price" property="price"/>
         <result column="status" property="status"/>
         <result column="create_time" property="createTime"/>
@@ -18,18 +18,14 @@
     </select>
 
     <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.Combo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO combo (name, image, description, price, status, create_time, update_time)
-        VALUES (#{name}, #{image}, #{description}, #{price}, #{status}, #{createTime}, #{updateTime})
+        INSERT INTO combo (name, description, image, price, status, create_time, update_time) 
+        VALUES (#{name}, #{description}, #{image}, #{price}, #{status}, #{createTime}, #{updateTime})
     </insert>
 
     <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.Combo">
         UPDATE combo 
-        SET name = #{name}, 
-            image = #{image}, 
-            description = #{description}, 
-            price = #{price}, 
-            status = #{status}, 
-            update_time = #{updateTime} 
+        SET name = #{name}, description = #{description}, image = #{image}, 
+            price = #{price}, status = #{status}, update_time = #{updateTime} 
         WHERE id = #{id}
     </update>
 
@@ -38,7 +34,7 @@
     </delete>
 
     <select id="selectAll" resultMap="ComboResultMap">
-        SELECT * FROM combo ORDER BY create_time DESC
+        SELECT * FROM combo ORDER BY id ASC
     </select>
 
     <select id="selectByName" parameterType="String" resultMap="ComboResultMap">
@@ -50,7 +46,7 @@
     </select>
 
     <select id="selectEnabled" resultMap="ComboResultMap">
-        SELECT * FROM combo WHERE status = 1
+        SELECT * FROM combo WHERE status = 1 ORDER BY id ASC
     </select>
 
 </mapper>

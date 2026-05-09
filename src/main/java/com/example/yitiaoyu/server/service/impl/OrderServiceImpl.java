@@ -1,6 +1,7 @@
 package com.example.yitiaoyu.server.service.impl;
 
 import com.example.yitiaoyu.common.BusinessException;
+import com.example.yitiaoyu.common.UserContext;
 import com.example.yitiaoyu.pojo.dto.OrderDTO;
 import com.example.yitiaoyu.pojo.entity.*;
 import com.example.yitiaoyu.pojo.vo.OrderItemVO;
@@ -8,6 +9,8 @@ import com.example.yitiaoyu.pojo.vo.OrderVO;
 import com.example.yitiaoyu.pojo.vo.PageVO;
 import com.example.yitiaoyu.server.mapper.*;
 import com.example.yitiaoyu.server.service.OrderService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,33 +20,37 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderMapper orderMapper;
-    private final OrderItemMapper orderItemMapper;
-    private final CartMapper cartMapper;
-    private final CartItemMapper cartItemMapper;
-    private final DishMapper dishMapper;
+    @Autowired
+    private OrderMapper orderMapper;
 
-    public OrderServiceImpl(OrderMapper orderMapper, OrderItemMapper orderItemMapper,
-                           CartMapper cartMapper, CartItemMapper cartItemMapper, DishMapper dishMapper) {
-        this.orderMapper = orderMapper;
-        this.orderItemMapper = orderItemMapper;
-        this.cartMapper = cartMapper;
-        this.cartItemMapper = cartItemMapper;
-        this.dishMapper = dishMapper;
-    }
+    @Autowired
+    private OrderItemMapper orderItemMapper;
+
+    @Autowired
+    private CartMapper cartMapper;
+
+    @Autowired
+    private CartItemMapper cartItemMapper;
+
+    @Autowired
+    private DishMapper dishMapper;
 
     @Override
     @Transactional
     public OrderVO create(OrderDTO orderDTO) {
+        log.info("【订单创建】用户: {} 创建订单 - tableNumber: {}", UserContext.getUsername(), orderDTO.getTableNumber());
         Cart cart = cartMapper.selectByTableNumber(orderDTO.getTableNumber());
         if (cart == null) {
+            log.warn("【订单创建】购物车为空 - tableNumber: {}", orderDTO.getTableNumber());
             throw new BusinessException("购物车为空");
         }
         List<CartItem> cartItems = cartItemMapper.selectByCartId(cart.getId());
         if (cartItems.isEmpty()) {
+            log.warn("【订单创建】购物车为空 - tableNumber: {}", orderDTO.getTableNumber());
             throw new BusinessException("购物车为空");
         }
         String orderNo = generateOrderNo();
@@ -60,6 +67,8 @@ public class OrderServiceImpl implements OrderService {
         order.setPayTime(LocalDateTime.now());
         order.setUpdateTime(LocalDateTime.now());
         orderMapper.insert(order);
+        log.info("【订单创建】订单创建成功 - orderId: {}, orderNo: {}, totalAmount: {}", 
+                order.getId(), orderNo, totalAmount);
         for (CartItem cartItem : cartItems) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(order.getId());
@@ -77,11 +86,14 @@ public class OrderServiceImpl implements OrderService {
         }
         cartItemMapper.deleteByCartId(cart.getId());
         cartMapper.deleteById(cart.getId());
+        log.info("【订单创建】清空购物车 - tableNumber: {}", orderDTO.getTableNumber());
         return getById(order.getId());
     }
 
     @Override
     public PageVO<OrderVO> list(String status, LocalDateTime startTime, LocalDateTime endTime, Integer page, Integer size) {
+        log.info("【订单查询】用户: {} 查询订单列表 - status: {}, startTime: {}, endTime: {}, page: {}, size: {}", 
+                UserContext.getUsername(), status, startTime, endTime, page, size);
         List<Order> orders;
         if (status != null && !status.isEmpty() && startTime != null && endTime != null) {
             orders = orderMapper.selectByStatusAndTimeRange(status, startTime, endTime);
@@ -104,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
         } else {
             orders = orderMapper.selectAll();
         }
+        log.info("【订单查询】查询到订单数量: {}", orders.size());
         int start = (page - 1) * size;
         int end = Math.min(start + size, orders.size());
         List<Order> pageContent = start < orders.size() ? orders.subList(start, end) : List.of();
@@ -117,8 +130,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderVO getById(Long id) {
+        log.info("【订单查询】用户: {} 查询订单详情 - orderId: {}", UserContext.getUsername(), id);
         Order order = orderMapper.selectById(id);
         if (order == null) {
+            log.warn("【订单查询】订单不存在 - orderId: {}", id);
             throw new BusinessException("订单不存在");
         }
         return convertToVO(order);
@@ -127,8 +142,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void updateStatus(Long id, String newStatus, String role) {
+        log.info("【订单状态更新】用户: {} 更新订单状态 - orderId: {}, newStatus: {}, role: {}", 
+                UserContext.getUsername(), id, newStatus, role);
         Order order = orderMapper.selectById(id);
         if (order == null) {
+            log.warn("【订单状态更新】订单不存在 - orderId: {}", id);
             throw new BusinessException("订单不存在");
         }
         String currentStatus = order.getStatus();
@@ -140,11 +158,13 @@ public class OrderServiceImpl implements OrderService {
                 order.setStatus(newStatus);
                 order.setFinishTime(LocalDateTime.now());
             } else {
+                log.warn("【订单状态更新】无效的状态变更 - currentStatus: {}, newStatus: {}", currentStatus, newStatus);
                 throw new BusinessException("无效的状态变更");
             }
         } else {
             if (!("已支付".equals(currentStatus) && "待出餐".equals(newStatus)) &&
                     !("待出餐".equals(currentStatus) && "已出餐".equals(newStatus))) {
+                log.warn("【订单状态更新】无权限进行此状态变更 - role: {}, currentStatus: {}, newStatus: {}", role, currentStatus, newStatus);
                 throw new BusinessException("无权限进行此状态变更");
             }
             order.setStatus(newStatus);
@@ -156,11 +176,14 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setUpdateTime(LocalDateTime.now());
         orderMapper.updateById(order);
+        log.info("【订单状态更新】订单状态更新成功 - orderId: {}, status: {}", id, newStatus);
     }
 
     @Override
     public List<OrderVO> listByTable(Integer tableNumber) {
+        log.info("【订单查询】用户: {} 查询桌号订单 - tableNumber: {}", UserContext.getUsername(), tableNumber);
         List<Order> orders = orderMapper.selectByTableNumber(tableNumber);
+        log.info("【订单查询】查询到桌号订单数量: {}", orders.size());
         return orders.stream().map(this::convertToVO).toList();
     }
 

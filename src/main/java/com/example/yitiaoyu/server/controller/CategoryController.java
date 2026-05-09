@@ -4,6 +4,7 @@ import com.example.yitiaoyu.common.Result;
 import com.example.yitiaoyu.pojo.dto.CategoryDTO;
 import com.example.yitiaoyu.pojo.entity.Category;
 import com.example.yitiaoyu.server.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,11 +13,8 @@ import java.util.List;
 @RequestMapping("/api/admin/category")
 public class CategoryController {
 
-    private final CategoryService categoryService;
-
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping
     public Result<List<Category>> list() {
@@ -51,11 +49,8 @@ public class CategoryController {
 @RequestMapping("/api/category")
 class CategoryPublicController {
 
-    private final CategoryService categoryService;
-
-    public CategoryPublicController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
+    @Autowired
+    private CategoryService categoryService;
 
     @GetMapping
     public Result<List<Category>> list() {

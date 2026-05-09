@@ -6,6 +6,7 @@ import com.example.yitiaoyu.pojo.entity.Combo;
 import com.example.yitiaoyu.pojo.vo.ComboVO;
 import com.example.yitiaoyu.pojo.vo.PageVO;
 import com.example.yitiaoyu.server.service.ComboService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +15,8 @@ import java.util.List;
 @RequestMapping("/api/admin/combo")
 public class ComboController {
 
-    private final ComboService comboService;
-
-    public ComboController(ComboService comboService) {
-        this.comboService = comboService;
-    }
+    @Autowired
+    private ComboService comboService;
 
     @GetMapping
     public Result<PageVO<ComboVO>> list(@RequestParam(defaultValue = "1") Integer page,
@@ -60,11 +58,8 @@ public class ComboController {
 @RequestMapping("/api/combo")
 class ComboPublicController {
 
-    private final ComboService comboService;
-
-    public ComboPublicController(ComboService comboService) {
-        this.comboService = comboService;
-    }
+    @Autowired
+    private ComboService comboService;
 
     @GetMapping
     public Result<List<Combo>> list() {

@@ -6,6 +6,7 @@ import com.example.yitiaoyu.pojo.entity.Dish;
 import com.example.yitiaoyu.pojo.vo.DishVO;
 import com.example.yitiaoyu.pojo.vo.PageVO;
 import com.example.yitiaoyu.server.service.DishService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +15,8 @@ import java.util.List;
 @RequestMapping("/api/admin/dish")
 public class DishController {
 
-    private final DishService dishService;
-
-    public DishController(DishService dishService) {
-        this.dishService = dishService;
-    }
+    @Autowired
+    private DishService dishService;
 
     @GetMapping
     public Result<PageVO<DishVO>> list(@RequestParam(required = false) Long categoryId,
@@ -62,11 +60,8 @@ public class DishController {
 @RequestMapping("/api/dish")
 class DishPublicController {
 
-    private final DishService dishService;
-
-    public DishPublicController(DishService dishService) {
-        this.dishService = dishService;
-    }
+    @Autowired
+    private DishService dishService;
 
     @GetMapping("/category/{categoryId}")
     public Result<List<Dish>> listByCategory(@PathVariable Long categoryId) {

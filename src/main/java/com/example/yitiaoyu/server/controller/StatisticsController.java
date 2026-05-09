@@ -3,6 +3,7 @@ package com.example.yitiaoyu.server.controller;
 import com.example.yitiaoyu.common.Result;
 import com.example.yitiaoyu.pojo.vo.StatisticsVO;
 import com.example.yitiaoyu.server.service.StatisticsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +16,8 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/admin/statistics")
 public class StatisticsController {
 
-    private final StatisticsService statisticsService;
-
-    public StatisticsController(StatisticsService statisticsService) {
-        this.statisticsService = statisticsService;
-    }
+    @Autowired
+    private StatisticsService statisticsService;
 
     @GetMapping
     public Result<StatisticsVO> getStatistics(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,

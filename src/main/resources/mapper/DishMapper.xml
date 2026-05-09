@@ -20,20 +20,14 @@
     </select>
 
     <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.Dish" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO dish (name, category_id, image, description, flavors, price, status, create_time, update_time)
+        INSERT INTO dish (name, category_id, image, description, flavors, price, status, create_time, update_time) 
         VALUES (#{name}, #{categoryId}, #{image}, #{description}, #{flavors}, #{price}, #{status}, #{createTime}, #{updateTime})
     </insert>
 
     <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.Dish">
         UPDATE dish 
-        SET name = #{name}, 
-            category_id = #{categoryId}, 
-            image = #{image}, 
-            description = #{description}, 
-            flavors = #{flavors}, 
-            price = #{price}, 
-            status = #{status}, 
-            update_time = #{updateTime} 
+        SET name = #{name}, category_id = #{categoryId}, image = #{image}, description = #{description}, 
+            flavors = #{flavors}, price = #{price}, status = #{status}, update_time = #{updateTime} 
         WHERE id = #{id}
     </update>
 
@@ -41,30 +35,30 @@
         DELETE FROM dish WHERE id = #{id}
     </delete>
 
-    <select id="selectByCategory" parameterType="Long" resultMap="DishResultMap">
-        SELECT * FROM dish WHERE category_id = #{categoryId} AND status = 1 ORDER BY create_time DESC
+    <select id="selectAll" resultMap="DishResultMap">
+        SELECT * FROM dish ORDER BY category_id ASC, id ASC
     </select>
 
-    <select id="countByCategory" parameterType="Long" resultType="Integer">
-        SELECT COUNT(*) FROM dish WHERE category_id = #{categoryId}
+    <select id="selectByCategory" parameterType="Long" resultMap="DishResultMap">
+        SELECT * FROM dish WHERE category_id = #{categoryId} ORDER BY id ASC
     </select>
 
     <select id="selectByCategoryAll" parameterType="Long" resultMap="DishResultMap">
-        SELECT * FROM dish WHERE category_id = #{categoryId} ORDER BY create_time DESC
+        SELECT * FROM dish WHERE category_id = #{categoryId} ORDER BY id ASC
     </select>
 
     <select id="selectByName" parameterType="String" resultMap="DishResultMap">
-        SELECT * FROM dish WHERE name LIKE CONCAT('%', #{name}, '%') ORDER BY create_time DESC
-    </select>
-
-    <select id="selectAll" resultMap="DishResultMap">
-        SELECT * FROM dish ORDER BY create_time DESC
+        SELECT * FROM dish WHERE name LIKE CONCAT('%', #{name}, '%') ORDER BY id ASC
     </select>
 
     <select id="selectByCategoryAndName" resultMap="DishResultMap">
         SELECT * FROM dish 
         WHERE category_id = #{categoryId} AND name LIKE CONCAT('%', #{name}, '%') 
-        ORDER BY create_time DESC
+        ORDER BY id ASC
+    </select>
+
+    <select id="countByCategory" parameterType="Long" resultType="Integer">
+        SELECT COUNT(*) FROM dish WHERE category_id = #{categoryId}
     </select>
 
 </mapper>

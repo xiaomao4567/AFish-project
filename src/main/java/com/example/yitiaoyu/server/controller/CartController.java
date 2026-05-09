@@ -4,17 +4,15 @@ import com.example.yitiaoyu.common.Result;
 import com.example.yitiaoyu.pojo.dto.CartItemDTO;
 import com.example.yitiaoyu.pojo.vo.CartVO;
 import com.example.yitiaoyu.server.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
 
-    private final CartService cartService;
-
-    public CartController(CartService cartService) {
-        this.cartService = cartService;
-    }
+    @Autowired
+    private CartService cartService;
 
     @GetMapping("/{tableNumber}")
     public Result<CartVO> getByTable(@PathVariable Integer tableNumber) {

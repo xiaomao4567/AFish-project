@@ -1,6 +1,7 @@
 package com.example.yitiaoyu.server.service.impl;
 
 import com.example.yitiaoyu.common.BusinessException;
+import com.example.yitiaoyu.common.UserContext;
 import com.example.yitiaoyu.pojo.dto.DishDTO;
 import com.example.yitiaoyu.pojo.entity.Category;
 import com.example.yitiaoyu.pojo.entity.Dish;
@@ -10,6 +11,7 @@ import com.example.yitiaoyu.server.mapper.CategoryMapper;
 import com.example.yitiaoyu.server.mapper.DishMapper;
 import com.example.yitiaoyu.server.service.DishService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,17 +21,16 @@ import java.util.List;
 @Service
 public class DishServiceImpl implements DishService {
 
-    private final DishMapper dishMapper;
-    private final CategoryMapper categoryMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
-    public DishServiceImpl(DishMapper dishMapper, CategoryMapper categoryMapper) {
-        this.dishMapper = dishMapper;
-        this.categoryMapper = categoryMapper;
-    }
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Override
     public PageVO<DishVO> list(Long categoryId, String name, Integer page, Integer size) {
-        log.info("查询菜品列表 - categoryId: {}, name: {}, page: {}, size: {}", categoryId, name, page, size);
+        log.info("【菜品查询】用户: {} 查询菜品列表 - categoryId: {}, name: {}, page: {}, size: {}", 
+                UserContext.getUsername(), categoryId, name, page, size);
         List<Dish> dishes;
         if (categoryId != null && name != null && !name.isEmpty()) {
             dishes = dishMapper.selectByCategoryAndName(categoryId, name);
@@ -43,7 +44,7 @@ public class DishServiceImpl implements DishService {
         int start = (page - 1) * size;
         int end = Math.min(start + size, dishes.size());
         List<Dish> pageContent = start < dishes.size() ? dishes.subList(start, end) : List.of();
-        log.info("查询到菜品数量: {}", dishes.size());
+        log.info("【菜品查询】查询到菜品数量: {}", dishes.size());
         return new PageVO<>(
                 pageContent.stream().map(this::convertToVO).toList(),
                 (long) dishes.size(),
@@ -54,10 +55,10 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public DishVO getById(Long id) {
-        log.info("查询菜品详情 - id: {}", id);
+        log.info("【菜品查询】用户: {} 查询菜品详情 - id: {}", UserContext.getUsername(), id);
         Dish dish = dishMapper.selectById(id);
         if (dish == null) {
-            log.warn("菜品不存在 - id: {}", id);
+            log.warn("【菜品查询】菜品不存在 - id: {}", id);
             throw new BusinessException("菜品不存在");
         }
         return convertToVO(dish);
@@ -65,7 +66,7 @@ public class DishServiceImpl implements DishService {
 
     @Override
     public void create(DishDTO dishDTO) {
-        log.info("创建菜品 - name: {}", dishDTO.getName());
+        log.info("【菜品创建】用户: {} 创建菜品 - name: {}", UserContext.getUsername(), dishDTO.getName());
         Dish dish = new Dish();
         dish.setName(dishDTO.getName());
         dish.setCategoryId(dishDTO.getCategoryId());
@@ -77,15 +78,15 @@ public class DishServiceImpl implements DishService {
         dish.setCreateTime(LocalDateTime.now());
         dish.setUpdateTime(LocalDateTime.now());
         dishMapper.insert(dish);
-        log.info("菜品创建成功 - id: {}", dish.getId());
+        log.info("【菜品创建】菜品创建成功 - id: {}", dish.getId());
     }
 
     @Override
     public void update(Long id, DishDTO dishDTO) {
-        log.info("更新菜品 - id: {}, name: {}", id, dishDTO.getName());
+        log.info("【菜品更新】用户: {} 更新菜品 - id: {}, name: {}", UserContext.getUsername(), id, dishDTO.getName());
         Dish dish = dishMapper.selectById(id);
         if (dish == null) {
-            log.warn("菜品不存在 - id: {}", id);
+            log.warn("【菜品更新】菜品不存在 - id: {}", id);
             throw new BusinessException("菜品不存在");
         }
         dish.setName(dishDTO.getName());
@@ -99,37 +100,37 @@ public class DishServiceImpl implements DishService {
         }
         dish.setUpdateTime(LocalDateTime.now());
         dishMapper.updateById(dish);
-        log.info("菜品更新成功 - id: {}", id);
+        log.info("【菜品更新】菜品更新成功 - id: {}", id);
     }
 
     @Override
     public void delete(Long id) {
-        log.info("删除菜品 - id: {}", id);
+        log.info("【菜品删除】用户: {} 删除菜品 - id: {}", UserContext.getUsername(), id);
         if (dishMapper.selectById(id) == null) {
-            log.warn("菜品不存在 - id: {}", id);
+            log.warn("【菜品删除】菜品不存在 - id: {}", id);
             throw new BusinessException("菜品不存在");
         }
         dishMapper.deleteById(id);
-        log.info("菜品删除成功 - id: {}", id);
+        log.info("【菜品删除】菜品删除成功 - id: {}", id);
     }
 
     @Override
     public void updateStatus(Long id, Integer status) {
-        log.info("更新菜品状态 - id: {}, status: {}", id, status);
+        log.info("【菜品状态更新】用户: {} 更新菜品状态 - id: {}, status: {}", UserContext.getUsername(), id, status);
         Dish dish = dishMapper.selectById(id);
         if (dish == null) {
-            log.warn("菜品不存在 - id: {}", id);
+            log.warn("【菜品状态更新】菜品不存在 - id: {}", id);
             throw new BusinessException("菜品不存在");
         }
         dish.setStatus(status);
         dish.setUpdateTime(LocalDateTime.now());
         dishMapper.updateById(dish);
-        log.info("菜品状态更新成功 - id: {}, status: {}", id, status);
+        log.info("【菜品状态更新】菜品状态更新成功 - id: {}, status: {}", id, status);
     }
 
     @Override
     public List<Dish> listByCategory(Long categoryId) {
-        log.info("查询分类下的菜品 - categoryId: {}", categoryId);
+        log.info("【菜品查询】用户: {} 查询分类下的菜品 - categoryId: {}", UserContext.getUsername(), categoryId);
         return dishMapper.selectByCategory(categoryId);
     }
 
