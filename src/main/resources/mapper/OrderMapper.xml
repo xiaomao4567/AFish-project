@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.yitiaoyu.server.mapper.OrderMapper">
+
+    <resultMap id="OrderResultMap" type="com.example.yitiaoyu.pojo.entity.Order">
+        <id column="id" property="id"/>
+        <result column="order_no" property="orderNo"/>
+        <result column="table_number" property="tableNumber"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="status" property="status"/>
+        <result column="remark" property="remark"/>
+        <result column="create_time" property="createTime"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="prepare_time" property="prepareTime"/>
+        <result column="finish_time" property="finishTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="Long" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.Order" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (order_no, table_number, total_amount, status, remark, create_time, pay_time, prepare_time, finish_time, update_time) 
+        VALUES (#{orderNo}, #{tableNumber}, #{totalAmount}, #{status}, #{remark}, #{createTime}, #{payTime}, #{prepareTime}, #{finishTime}, #{updateTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.Order">
+        UPDATE orders 
+        SET order_no = #{orderNo}, table_number = #{tableNumber}, total_amount = #{totalAmount}, 
+            status = #{status}, remark = #{remark}, prepare_time = #{prepareTime}, 
+            finish_time = #{finishTime}, update_time = #{updateTime} 
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM orders WHERE id = #{id}
+    </delete>
+
+    <select id="selectByStatusAndTimeRange" resultMap="OrderResultMap">
+        SELECT * FROM orders 
+        WHERE status = #{status} AND create_time >= #{startTime} AND create_time &lt;= #{endTime} 
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByTableNumber" parameterType="Integer" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE table_number = #{tableNumber} ORDER BY create_time DESC
+    </select>
+
+    <select id="sumTotalAmountByStatusAndTimeRange" resultType="java.math.BigDecimal">
+        SELECT SUM(total_amount) FROM orders 
+        WHERE status = #{status} AND create_time >= #{startTime} AND create_time &lt;= #{endTime}
+    </select>
+
+    <select id="countByStatusAndTimeRange" resultType="Integer">
+        SELECT COUNT(*) FROM orders 
+        WHERE status = #{status} AND create_time >= #{startTime} AND create_time &lt;= #{endTime}
+    </select>
+
+    <select id="selectAllByTimeRange" resultMap="OrderResultMap">
+        SELECT * FROM orders 
+        WHERE create_time >= #{startTime} AND create_time &lt;= #{endTime} 
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByStatus" parameterType="String" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE status = #{status} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectAll" resultMap="OrderResultMap">
+        SELECT * FROM orders ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByStartTime" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE create_time >= #{startTime} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByEndTime" resultMap="OrderResultMap">
+        SELECT * FROM orders WHERE create_time &lt;= #{endTime} ORDER BY create_time DESC
+    </select>
+
+</mapper>

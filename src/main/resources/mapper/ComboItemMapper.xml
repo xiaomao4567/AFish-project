@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.yitiaoyu.server.mapper.ComboItemMapper">
+
+    <resultMap id="ComboItemResultMap" type="com.example.yitiaoyu.pojo.entity.ComboItem">
+        <id column="id" property="id"/>
+        <result column="combo_id" property="comboId"/>
+        <result column="dish_id" property="dishId"/>
+        <result column="flavor" property="flavor"/>
+        <result column="quantity" property="quantity"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="Long" resultMap="ComboItemResultMap">
+        SELECT * FROM combo_item WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.ComboItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO combo_item (combo_id, dish_id, flavor, quantity, create_time) 
+        VALUES (#{comboId}, #{dishId}, #{flavor}, #{quantity}, #{createTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.ComboItem">
+        UPDATE combo_item 
+        SET combo_id = #{comboId}, dish_id = #{dishId}, flavor = #{flavor}, quantity = #{quantity} 
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM combo_item WHERE id = #{id}
+    </delete>
+
+    <select id="selectByComboId" parameterType="Long" resultMap="ComboItemResultMap">
+        SELECT * FROM combo_item WHERE combo_id = #{comboId}
+    </select>
+
+    <delete id="deleteByComboId" parameterType="Long">
+        DELETE FROM combo_item WHERE combo_id = #{comboId}
+    </delete>
+
+</mapper>

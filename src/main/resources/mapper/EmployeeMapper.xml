@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.yitiaoyu.server.mapper.EmployeeMapper">
+
+    <resultMap id="EmployeeResultMap" type="com.example.yitiaoyu.pojo.entity.Employee">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="real_name" property="realName"/>
+        <result column="role" property="role"/>
+        <result column="phone" property="phone"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="Long" resultMap="EmployeeResultMap">
+        SELECT * FROM employee WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.Employee" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO employee (username, password, real_name, role, phone, create_time, update_time) 
+        VALUES (#{username}, #{password}, #{realName}, #{role}, #{phone}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.Employee">
+        UPDATE employee 
+        SET username = #{username}, password = #{password}, real_name = #{realName}, 
+            role = #{role}, phone = #{phone}, update_time = #{updateTime} 
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM employee WHERE id = #{id}
+    </delete>
+
+    <select id="selectByUsername" parameterType="String" resultMap="EmployeeResultMap">
+        SELECT * FROM employee WHERE username = #{username}
+    </select>
+
+    <select id="selectAll" resultMap="EmployeeResultMap">
+        SELECT * FROM employee ORDER BY create_time DESC
+    </select>
+
+</mapper>

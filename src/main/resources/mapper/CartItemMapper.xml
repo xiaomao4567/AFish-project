@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.yitiaoyu.server.mapper.CartItemMapper">
+
+    <resultMap id="CartItemResultMap" type="com.example.yitiaoyu.pojo.entity.CartItem">
+        <id column="id" property="id"/>
+        <result column="cart_id" property="cartId"/>
+        <result column="dish_id" property="dishId"/>
+        <result column="flavor" property="flavor"/>
+        <result column="quantity" property="quantity"/>
+        <result column="price" property="price"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <select id="selectById" parameterType="Long" resultMap="CartItemResultMap">
+        SELECT * FROM cart_item WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.CartItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO cart_item (cart_id, dish_id, flavor, quantity, price, create_time, update_time) 
+        VALUES (#{cartId}, #{dishId}, #{flavor}, #{quantity}, #{price}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.CartItem">
+        UPDATE cart_item 
+        SET cart_id = #{cartId}, dish_id = #{dishId}, flavor = #{flavor}, 
+            quantity = #{quantity}, price = #{price}, update_time = #{updateTime} 
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM cart_item WHERE id = #{id}
+    </delete>
+
+    <select id="selectByCartId" parameterType="Long" resultMap="CartItemResultMap">
+        SELECT * FROM cart_item WHERE cart_id = #{cartId}
+    </select>
+
+    <delete id="deleteByCartId" parameterType="Long">
+        DELETE FROM cart_item WHERE cart_id = #{cartId}
+    </delete>
+
+    <select id="selectByCartIdAndDishIdAndFlavor" resultMap="CartItemResultMap">
+        SELECT * FROM cart_item 
+        WHERE cart_id = #{cartId} AND dish_id = #{dishId} AND flavor = #{flavor}
+    </select>
+
+</mapper>
