@@ -33,9 +33,9 @@
       <view wx:if="{{isCombo && item.items && item.items.length > 0}}" class="items-section">
         <text class="section-title">套餐包含</text>
         <view class="items-list">
-          <view wx:for="{{item.items}}" wx:key="dishId" class="item-row">
-            <text class="item-name">{{item.dishName}}</text>
-            <text class="item-quantity">×{{item.quantity}}</text>
+          <view wx:for="{{item.items}}" wx:key="dishId" wx:for-item="comboItem" class="item-row">
+            <text class="item-name">{{comboItem.dishName || comboItem.name}}</text>
+            <text class="item-quantity">×{{comboItem.quantity}}</text>
           </view>
         </view>
       </view>

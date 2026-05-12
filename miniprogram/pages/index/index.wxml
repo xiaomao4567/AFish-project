@@ -81,8 +81,8 @@
           <text class="combo-name">{{item.name}}</text>
           <text class="combo-desc">{{item.description}}</text>
           <view class="combo-items">
-            <text wx:for="{{item.items}}" wx:key="index" class="combo-item">
-              {{item.name}}×{{item.quantity}}
+            <text wx:for="{{item.items}}" wx:key="index" wx:for-item="comboItem" class="combo-item">
+              {{comboItem.dishName || comboItem.name}}×{{comboItem.quantity}}
             </text>
           </view>
           <view class="combo-bottom">

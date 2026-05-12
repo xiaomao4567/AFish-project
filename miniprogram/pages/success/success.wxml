@@ -20,7 +20,7 @@
     </view>
     <view class="order-item total-row">
       <text class="item-label">订单金额</text>
-      <text class="item-value total">¥{{total}}</text>
+      <text class="item-value total">¥{{total.toFixed(2)}}</text>
     </view>
   </view>
 
