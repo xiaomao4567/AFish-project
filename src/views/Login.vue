@@ -103,8 +103,9 @@ const handleLogin = async () => {
         if (res.code === 200 && res.data && res.data.token) {
           localStorage.setItem('token', res.data.token)
           localStorage.setItem('user', JSON.stringify(res.data))
+          localStorage.setItem('loginTime', Date.now().toString())
           ElMessage.success('登录成功！')
-          router.push('/')
+          router.push('/dashboard')
         } else {
           ElMessage.error(res.message || res.msg || '登录失败：数据格式错误')
         }

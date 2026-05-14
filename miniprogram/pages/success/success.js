@@ -2,16 +2,23 @@ Page({
   data: {
     orderNo: '',
     total: 0,
+    totalStr: '0.00',
     status: '已支付',
     createTime: ''
   },
 
   onLoad: function (options) {
+    const total = parseFloat(options.total) || 0
     this.setData({
       orderNo: options.orderNo,
-      total: parseFloat(options.total) || 0,
+      total: total,
+      totalStr: total.toFixed(2),
       createTime: this.formatTime(new Date())
     })
+  },
+
+  goBack: function () {
+    wx.switchTab({ url: '/pages/index/index' })
   },
 
   formatTime: function (date) {

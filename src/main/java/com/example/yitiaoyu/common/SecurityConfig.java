@@ -19,6 +19,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/wechat-login").permitAll()
                         .requestMatchers("/api/cart/**").permitAll()
                         .requestMatchers("/api/dish/**").permitAll()
                         .requestMatchers("/api/combo/**").permitAll()

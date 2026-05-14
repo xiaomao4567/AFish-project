@@ -5,12 +5,17 @@ Page({
     tableNo: '',
     items: [],
     total: 0,
-    remark: ''
+    remark: '',
+    expandedCombos: []
   },
 
   onLoad: function () {
     this.setData({ tableNo: App.globalData.tableNo || wx.getStorageSync('tableNo') })
     this.loadCart()
+  },
+
+  goBack: function () {
+    wx.navigateBack()
   },
 
   loadCart: function () {
@@ -25,6 +30,18 @@ Page({
 
   inputRemark: function (e) {
     this.setData({ remark: e.detail.value })
+  },
+
+  toggleComboDetail: function (e) {
+    const index = e.currentTarget.dataset.index
+    const expandedCombos = [...this.data.expandedCombos]
+    const idx = expandedCombos.indexOf(index)
+    if (idx > -1) {
+      expandedCombos.splice(idx, 1)
+    } else {
+      expandedCombos.push(index)
+    }
+    this.setData({ expandedCombos })
   },
 
   submitOrder: function () {

@@ -1,13 +1,34 @@
 <view class="container">
   <view class="header">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
     <text class="header-title">我的订单</text>
-    <text class="table-tag" wx:if="{{tableNo}}">🪑 桌号：{{tableNo}}</text>
+    <view class="header-right">
+      <text class="table-tag" wx:if="{{tableNo}}">🪑 {{tableNo}}号桌</text>
+    </view>
+  </view>
+
+  <view class="status-tabs">
+    <view 
+      wx:for="{{statusTabs}}" 
+      wx:key="value"
+      class="status-tab {{currentStatus === item.value ? 'active' : ''}}"
+      bindtap="switchStatus"
+      data-status="{{item.value}}"
+    >
+      <text class="tab-text">{{item.label}}</text>
+      <view class="tab-badge" wx:if="{{item.count > 0}}">{{item.count}}</view>
+    </view>
   </view>
 
   <view class="empty-order" wx:if="{{!loading && orders.length === 0}}">
     <text class="empty-icon">📋</text>
     <text class="empty-text">暂无订单</text>
-    <text class="empty-hint" wx:if="{{!tableNo}}">请先扫描桌码进入</text>
+    <text class="empty-hint" wx:if="{{!tableNo}}">请先选择桌号</text>
+    <view class="empty-btn" wx:if="{{!tableNo}}" bindtap="showTableModal">
+      <text>选择桌号</text>
+    </view>
   </view>
 
   <scroll-view 
@@ -20,29 +41,56 @@
     <view class="order-list">
       <view 
         wx:for="{{orders}}" 
-        wx:key="id" 
+        wx:key="orderNo" 
         class="order-card"
-        data-order-no="{{orderNo}}"
         bindtap="viewDetail"
+        data-order-no="{{item.orderNo}}"
       >
         <view class="order-header">
-          <text class="order-no">订单号：{{orderNo}}</text>
-          <text class="order-status" :class="getStatusClass(status)">
-            {{getStatusText(status)}}
+          <text class="order-no">订单号：{{item.orderNo}}</text>
+          <text class="order-status" :class="getStatusClass(item.status)">
+            {{getStatusText(item.status)}}
           </text>
         </view>
         
         <view class="order-items">
-          <view wx:for="{{items}}" wx:for-item="item" wx:key="dishId" class="order-item">
-            <text class="item-name">{{item.dishName || item.name}}</text>
-            <text class="item-quantity">×{{item.quantity}}</text>
+          <view wx:for="{{item.items}}" wx:for-item="subItem" wx:key="dishId" class="order-item">
+            <image class="item-image" src="{{subItem.image}}" mode="aspectFill" />
+            <view class="item-info">
+              <text class="item-name">{{subItem.dishName || subItem.name}}</text>
+              <text class="item-flavor" wx:if="{{subItem.flavor || subItem.taste}}">{{subItem.flavor || subItem.taste}}</text>
+            </view>
+            <text class="item-quantity">×{{subItem.quantity}}</text>
           </view>
-          <text class="more-items" wx:if="{{items.length > 3}}">...等{{items.length}}件商品</text>
+          <text class="more-items" wx:if="{{item.items && item.items.length > 5}}">...等{{item.items.length}}件商品</text>
         </view>
 
         <view class="order-footer">
-          <text class="order-time">{{createTime}}</text>
-          <text class="order-total">¥{{totalAmount}}</text>
+          <view class="order-info">
+            <text class="order-time">{{item.createTime}}</text>
+            <text class="order-total">¥{{item.totalAmount}}</text>
+          </view>
+          <view class="order-actions">
+            <view 
+              class="action-btn cancel" 
+              wx:if="{{item.status === 'PENDING'}}" 
+              bindtap="cancelOrder"
+              data-order-no="{{item.orderNo}}"
+            >
+              <text>取消订单</text>
+            </view>
+            <view 
+              class="action-btn pay" 
+              wx:if="{{item.status === 'PENDING'}}" 
+              bindtap="payOrder"
+              data-order-no="{{item.orderNo}}"
+            >
+              <text>去支付</text>
+            </view>
+            <view class="action-btn done" wx:if="{{item.status === 'SERVED'}}">
+              <text>已完成</text>
+            </view>
+          </view>
         </view>
       </view>
     </view>
@@ -50,5 +98,99 @@
 
   <view class="loading" wx:if="{{loading}}">
     <text>加载中...</text>
+  </view>
+
+  <view class="table-modal" wx:if="{{showTableModal}}" bindtap="hideTableModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">选择桌号</text>
+        <view class="modal-close" bindtap="hideTableModal">×</view>
+      </view>
+      <view class="table-grid">
+        <view 
+          wx:for="{{tableList}}" 
+          wx:key="item" 
+          class="table-item"
+          bindtap="selectTable"
+          data-table="{{item}}"
+        >
+          <text>{{item}}号桌</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="order-detail-modal" wx:if="{{showDetailModal}}" bindtap="hideDetailModal">
+    <view class="detail-content" catchtap="stopPropagation">
+      <view class="detail-header">
+        <text class="detail-title">订单详情</text>
+        <view class="detail-close" bindtap="hideDetailModal">×</view>
+      </view>
+      <view class="detail-body" wx:if="{{currentOrder}}">
+        <view class="detail-row">
+          <text class="detail-label">订单号</text>
+          <text class="detail-value">{{currentOrder.orderNo}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">桌号</text>
+          <text class="detail-value">🪑 {{currentOrder.tableNo}}号桌</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">下单时间</text>
+          <text class="detail-value">{{currentOrder.createTime}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">订单状态</text>
+          <text class="detail-value status" :class="getStatusClass(currentOrder.status)">
+            {{getStatusText(currentOrder.status)}}
+          </text>
+        </view>
+        <view class="detail-row" wx:if="{{currentOrder.remark}}">
+          <text class="detail-label">备注</text>
+          <text class="detail-value">{{currentOrder.remark}}</text>
+        </view>
+        <view class="detail-section">
+          <text class="section-title">订单明细</text>
+          <view class="detail-items">
+            <view wx:for="{{currentOrder.items}}" wx:for-item="item" wx:key="dishId" class="detail-item">
+              <image class="detail-item-image" src="{{item.image}}" mode="aspectFill" />
+              <view class="detail-item-info">
+                <text class="detail-item-name">{{item.dishName || item.name}}</text>
+                <text class="detail-item-flavor">{{item.flavor || item.taste || '原味'}}</text>
+              </view>
+              <view class="detail-item-right">
+                <text class="detail-item-price">¥{{item.price}}</text>
+                <text class="detail-item-quantity">×{{item.quantity}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="detail-total">
+          <text class="total-label">合计</text>
+          <text class="total-value">¥{{currentOrder.totalAmount}}</text>
+        </view>
+      </view>
+      <view class="detail-footer">
+        <view 
+          class="footer-btn cancel" 
+          wx:if="{{currentOrder && currentOrder.status === 'PENDING'}}" 
+          bindtap="cancelOrder"
+          data-order-no="{{currentOrder.orderNo}}"
+        >
+          <text>取消订单</text>
+        </view>
+        <view 
+          class="footer-btn pay" 
+          wx:if="{{currentOrder && currentOrder.status === 'PENDING'}}" 
+          bindtap="payOrder"
+          data-order-no="{{currentOrder.orderNo}}"
+        >
+          <text>去支付</text>
+        </view>
+        <view class="footer-btn close" wx:else bindtap="hideDetailModal">
+          <text>关闭</text>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

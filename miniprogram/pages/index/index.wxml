@@ -1,12 +1,16 @@
 <view class="container">
   <view class="header">
-    <view class="header-left">
-      <text class="greeting">Hi, {{username}}</text>
-      <text class="title">🍲 鱼你在一起</text>
+    <view class="header-content">
+      <view class="logo-section">
+        <text class="logo-icon">🐟</text>
+        <text class="logo-text">一条鱼</text>
+      </view>
+      <text class="system-name">云点餐系统</text>
+      <view class="logout-btn" bindtap="logout">
+        <text>退出</text>
+      </view>
     </view>
-    <view class="header-right" bindtap="logout">
-      <text class="logout-btn">退出</text>
-    </view>
+    <text class="slogan">鱼你在一起</text>
   </view>
 
   <view class="table-section" wx:if="{{!tableNo}}" bindtap="showTableModal">
@@ -46,7 +50,7 @@
   </scroll-view>
 
   <scroll-view class="content-scroll" scroll-y>
-    <view class="dish-grid" wx:if="!showCombos">
+    <view class="dish-grid" wx:if="{{!showCombos && dishes.length > 0}}">
       <view 
         wx:for="{{dishes}}" 
         wx:key="id" 
@@ -67,7 +71,7 @@
       </view>
     </view>
 
-    <view class="combo-list" wx:else>
+    <view class="combo-list" wx:if="{{showCombos && combos.length > 0}}">
       <view 
         wx:for="{{combos}}" 
         wx:key="id" 
@@ -101,6 +105,11 @@
       <text class="empty-icon">🍽️</text>
       <text class="empty-text">暂无菜品</text>
     </view>
+    
+    <view class="empty-state" wx:if="!loading && showCombos && combos.length === 0">
+      <text class="empty-icon">🎁</text>
+      <text class="empty-text">暂无套餐</text>
+    </view>
   </scroll-view>
 
   <view class="cart-btn" bindtap="goCart">
@@ -109,6 +118,7 @@
       <view class="cart-badge" wx:if="{{cartCount > 0}}">{{cartCount}}</view>
     </view>
     <text class="cart-text">购物车</text>
+    <text class="cart-price" wx:if="{{cartTotal > 0}}">¥{{cartTotal}}</text>
   </view>
 
   <view class="table-modal" wx:if="{{showTableModal}}" bindtap="hideTableModal">

@@ -1,6 +1,9 @@
 <view class="container">
   <view class="header">
-    <view class="header-left">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <view class="header-center">
       <text class="header-title">购物车</text>
       <text class="header-subtitle" wx:if="{{tableNo}}">桌号：{{tableNo}}</text>
     </view>
@@ -14,14 +17,35 @@
       <text class="empty-icon">🛒</text>
       <text class="empty-text">购物车是空的</text>
       <text class="empty-hint">快去挑选美味菜品吧</text>
+      <view class="empty-btn" bindtap="goBack">
+        <text>去选购</text>
+      </view>
     </view>
 
     <view class="cart-list" wx:else>
       <view wx:for="{{items}}" wx:key="id" class="cart-item">
         <image class="item-image" src="{{item.image || '/images/default.png'}}" mode="aspectFill" />
         <view class="item-info">
-          <text class="item-name">{{item.name}}</text>
+          <view class="item-header">
+            <text class="item-name">{{item.name}}</text>
+            <text class="item-tag" wx:if="{{item.isCombo}}">套餐</text>
+          </view>
           <text class="item-flavor" wx:if="{{item.flavor}}">口味：{{item.flavor}}</text>
+          
+          <view class="combo-detail" wx:if="{{item.isCombo && item.comboItems}}">
+            <view class="combo-detail-header" bindtap="toggleComboDetail" data-index="{{index}}">
+              <text class="combo-detail-title">查看套餐内容</text>
+              <text class="combo-detail-arrow">{{expandedCombos.includes(index) ? '▲' : '▼'}}</text>
+            </view>
+            <view class="combo-items-list" wx:if="{{expandedCombos.includes(index)}}">
+              <view wx:for="{{item.comboItems}}" wx:key="dishId" class="combo-sub-item">
+                <text class="sub-item-name">{{item.dishName || item.name}}</text>
+                <text class="sub-item-flavor">{{item.flavor || '原味'}}</text>
+                <text class="sub-item-quantity">×{{item.quantity}}</text>
+              </view>
+            </view>
+          </view>
+          
           <view class="item-bottom">
             <text class="item-price">¥{{item.price}}</text>
             <view class="quantity-wrap">

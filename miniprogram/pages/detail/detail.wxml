@@ -1,4 +1,12 @@
 <view class="container" wx:if="{{item}}">
+  <view class="header">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
+    <text class="header-title">菜品详情</text>
+    <view class="header-right"></view>
+  </view>
+  
   <scroll-view class="content-scroll" scroll-y>
     <image class="detail-image" src="{{item.image || '/images/default.png'}}" mode="aspectFill" />
     
@@ -34,7 +42,11 @@
         <text class="section-title">套餐包含</text>
         <view class="items-list">
           <view wx:for="{{item.items}}" wx:key="dishId" wx:for-item="comboItem" class="item-row">
-            <text class="item-name">{{comboItem.dishName || comboItem.name}}</text>
+            <image class="item-image-small" src="https://neeko-copilot.bytedance.net/api/text_to_image?prompt=food%20dish%20icon&image_size=square" mode="aspectFill" />
+            <view class="item-info">
+              <text class="item-name">{{comboItem.dishName || comboItem.name}}</text>
+              <text class="item-flavor">{{comboItem.flavor || '原味'}}</text>
+            </view>
             <text class="item-quantity">×{{comboItem.quantity}}</text>
           </view>
         </view>

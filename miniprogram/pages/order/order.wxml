@@ -1,7 +1,12 @@
 <view class="container">
-  <view class="order-header">
+  <view class="header">
+    <view class="header-left" bindtap="goBack">
+      <text class="back-icon">←</text>
+    </view>
     <text class="header-title">确认订单</text>
-    <text class="table-tag">🪑 桌号：{{tableNo}}</text>
+    <view class="header-right">
+      <text class="table-tag" wx:if="{{tableNo}}">🪑 {{tableNo}}号桌</text>
+    </view>
   </view>
 
   <scroll-view class="order-scroll" scroll-y>
@@ -11,8 +16,26 @@
         <view wx:for="{{items}}" wx:key="id" class="order-item">
           <image class="item-image" src="{{item.image || '/images/default.png'}}" mode="aspectFill" />
           <view class="item-info">
-            <text class="item-name">{{item.name}}</text>
+            <view class="item-header">
+              <text class="item-name">{{item.name}}</text>
+              <text class="item-tag" wx:if="{{item.isCombo}}">套餐</text>
+            </view>
             <text class="item-flavor" wx:if="{{item.flavor}}">{{item.flavor}}</text>
+            
+            <view class="combo-detail" wx:if="{{item.isCombo && item.comboItems}}">
+              <view class="combo-detail-header" bindtap="toggleComboDetail" data-index="{{index}}">
+                <text class="combo-detail-title">查看套餐内容</text>
+                <text class="combo-detail-arrow">{{expandedCombos.includes(index) ? '▲' : '▼'}}</text>
+              </view>
+              <view class="combo-items-list" wx:if="{{expandedCombos.includes(index)}}">
+                <view wx:for="{{item.comboItems}}" wx:key="dishId" class="combo-sub-item">
+                  <text class="sub-item-name">{{item.dishName || item.name}}</text>
+                  <text class="sub-item-flavor">{{item.flavor || '原味'}}</text>
+                  <text class="sub-item-quantity">×{{item.quantity}}</text>
+                </view>
+              </view>
+            </view>
+            
             <view class="item-bottom">
               <text class="item-price">¥{{item.price}}</text>
               <text class="item-quantity">×{{item.quantity}}</text>

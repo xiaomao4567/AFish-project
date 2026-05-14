@@ -4,33 +4,48 @@
 }
 
 .header {
-  background: #fff;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  width: 100%;
+  padding: 30rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30rpx;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .header-left {
   display: flex;
+  align-items: center;
+}
+
+.back-icon {
+  font-size: 40rpx;
+  color: #fff;
+}
+
+.header-center {
+  display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .header-title {
   font-size: 36rpx;
   font-weight: 600;
-  color: #333;
+  color: #fff;
 }
 
 .header-subtitle {
   font-size: 24rpx;
-  color: #999;
+  color: rgba(255, 255, 255, 0.8);
   margin-top: 8rpx;
 }
 
 .clear-btn {
   font-size: 28rpx;
-  color: #ff6b6b;
+  color: #fff;
 }
 
 .cart-scroll {
@@ -88,16 +103,86 @@
   justify-content: space-between;
 }
 
+.item-header {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
 .item-name {
   font-size: 30rpx;
   font-weight: 500;
   color: #333;
 }
 
+.item-tag {
+  font-size: 20rpx;
+  color: #fff;
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
 .item-flavor {
   font-size: 24rpx;
   color: #999;
   margin-top: 8rpx;
+}
+
+.combo-detail {
+  margin-top: 12rpx;
+  background: #f9f9f9;
+  border-radius: 12rpx;
+  overflow: hidden;
+}
+
+.combo-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 16rpx;
+}
+
+.combo-detail-title {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.combo-detail-arrow {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.combo-items-list {
+  padding: 0 16rpx 12rpx;
+}
+
+.combo-sub-item {
+  display: flex;
+  align-items: center;
+  padding: 8rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.combo-sub-item:last-child {
+  border-bottom: none;
+}
+
+.sub-item-name {
+  flex: 1;
+  font-size: 24rpx;
+  color: #333;
+}
+
+.sub-item-flavor {
+  font-size: 22rpx;
+  color: #999;
+  margin: 0 12rpx;
+}
+
+.sub-item-quantity {
+  font-size: 24rpx;
+  color: #666;
 }
 
 .item-bottom {

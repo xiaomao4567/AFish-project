@@ -4,40 +4,147 @@ page {
 }
 
 .container {
-  padding-bottom: 100rpx;
+  padding-bottom: 160rpx;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 60rpx 30rpx 30rpx;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-}
-
-.header-left {
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  width: 100%;
+  height: 20vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx;
 }
 
-.greeting {
-  font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 8rpx;
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20rpx;
+  margin-bottom: 12rpx;
 }
 
-.title {
-  font-size: 40rpx;
-  font-weight: bold;
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.logo-icon {
+  font-size: 52rpx;
+}
+
+.logo-text {
+  font-size: 44rpx;
+  font-weight: 700;
   color: #fff;
+  letter-spacing: 4rpx;
+}
+
+.system-name {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 8rpx 20rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20rpx;
 }
 
 .logout-btn {
-  font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.9);
-  padding: 10rpx 20rpx;
-  border: 1rpx solid rgba(255, 255, 255, 0.5);
+  font-size: 26rpx;
+  color: #fff;
+  padding: 12rpx 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24rpx;
+}
+
+.slogan {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 8rpx;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+}
+
+
+
+.header-bottom {
+  display: flex;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
   border-radius: 20rpx;
+  padding: 25rpx 20rpx;
+  justify-content: space-around;
+  margin-bottom: 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.stat-icon {
+  font-size: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.stat-value {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #fff;
+}
+
+.stat-label {
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4rpx;
+}
+
+.stat-badge {
+  position: absolute;
+  top: -10rpx;
+  right: -20rpx;
+  font-size: 18rpx;
+  color: #fff;
+  background: #FF4757;
+  padding: 4rpx 12rpx;
+  border-radius: 12rpx;
+}
+
+.promo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  border-radius: 16rpx;
+  padding: 20rpx 25rpx;
+  margin-top: 5rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.promo-icon {
+  font-size: 36rpx;
+}
+
+.promo-text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #fff;
+  margin-left: 15rpx;
+  font-weight: 500;
+}
+
+.promo-arrow {
+  font-size: 32rpx;
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .table-section {
@@ -122,7 +229,7 @@ page {
 }
 
 .category-item.active {
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
 }
 
 .category-icon {
@@ -140,7 +247,7 @@ page {
 }
 
 .content-scroll {
-  height: calc(100vh - 500rpx);
+  height: calc(100vh - 560rpx);
   padding: 0 20rpx;
 }
 
@@ -195,7 +302,7 @@ page {
 .dish-price {
   font-size: 32rpx;
   font-weight: bold;
-  color: #ff6b35;
+  color: #FF6B6B;
 }
 
 .dish-flavor {
@@ -268,14 +375,14 @@ page {
 .combo-price {
   font-size: 36rpx;
   font-weight: bold;
-  color: #ff6b35;
+  color: #FF6B6B;
 }
 
 .combo-tag {
   font-size: 22rpx;
   color: #fff;
   padding: 6rpx 16rpx;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
   border-radius: 20rpx;
 }
 
@@ -311,7 +418,7 @@ page {
   flex-direction: column;
   align-items: center;
   padding: 20rpx 30rpx;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
   border-radius: 50rpx;
   box-shadow: 0 8rpx 24rpx rgba(255, 107, 53, 0.4);
   z-index: 100;
@@ -335,13 +442,20 @@ page {
   text-align: center;
   font-size: 22rpx;
   color: #fff;
-  background: #ff4757;
+  background: #FF4757;
   border-radius: 18rpx;
 }
 
 .cart-text {
   font-size: 22rpx;
   color: #fff;
+  margin-top: 4rpx;
+}
+
+.cart-price {
+  font-size: 24rpx;
+  color: #fff;
+  font-weight: 600;
   margin-top: 4rpx;
 }
 
@@ -409,6 +523,6 @@ page {
 }
 
 .table-item:active text {
-  background: #ff6b35;
+  background: #FF6B6B;
   color: #fff;
 }

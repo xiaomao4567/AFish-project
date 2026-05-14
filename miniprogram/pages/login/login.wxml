@@ -1,42 +1,44 @@
 <view class="container">
-  <view class="logo">
-    <text class="logo-icon">🍽️</text>
-    <text class="logo-title">AFish 餐饮</text>
-    <text class="logo-subtitle">新鲜美味，用心烹饪</text>
+  <view class="bg-decoration">
+    <view class="wave wave1"></view>
+    <view class="wave wave2"></view>
+    <view class="wave wave3"></view>
   </view>
 
-  <view class="login-form">
-    <view class="form-item">
-      <text class="form-label">用户名</text>
-      <input 
-        class="form-input" 
-        placeholder="请输入用户名" 
-        value="{{username}}"
-        bindinput="inputUsername"
-      />
-    </view>
-    
-    <view class="form-item">
-      <text class="form-label">密码</text>
-      <input 
-        class="form-input" 
-        placeholder="请输入密码" 
-        type="password"
-        value="{{password}}"
-        bindinput="inputPassword"
-      />
-    </view>
-
-    <view class="login-btn" bindtap="login" :class="{ loading: loading }">
-      <text>{{ loading ? '登录中...' : '登录' }}</text>
+  <view class="login-content">
+    <view class="brand-section">
+      <view class="brand-logo">
+        <svg viewBox="0 0 100 100" class="fish-icon">
+          <ellipse cx="50" cy="50" rx="35" ry="25" fill="#FFFFFF"/>
+          <ellipse cx="35" cy="45" rx="8" ry="12" fill="#FF6B6B" opacity="0.3"/>
+          <circle cx="60" cy="45" r="5" fill="#FF6B6B"/>
+          <path d="M75 50 Q85 50 85 50" stroke="#FFFFFF" stroke-width="3" fill="none"/>
+          <path d="M15 50 Q5 50 5 50" stroke="#FFFFFF" stroke-width="3" fill="none"/>
+          <path d="M45 65 Q50 75 55 65" stroke="#FF6B6B" stroke-width="2" fill="none" opacity="0.6"/>
+        </svg>
+      </view>
+      <text class="brand-title">一条鱼云点餐</text>
+      <text class="brand-subtitle">新鲜美味，用心烹饪</text>
+      <view class="brand-features">
+        <text class="feature-item">🍽️ 扫码点餐</text>
+        <text class="feature-item">📱 便捷支付</text>
+        <text class="feature-item">🔥 美味佳肴</text>
+      </view>
     </view>
 
-    <view class="guest-btn" bindtap="guestLogin">
-      <text>游客登录</text>
+    <view class="login-box">
+      <view class="login-btn" bindtap="wechatLogin" :class="{ loading: loading }">
+        <text class="btn-icon">💬</text>
+        <text class="btn-text">{{ loading ? '登录中...' : '微信一键登录' }}</text>
+      </view>
+      
+      <view class="guest-btn" bindtap="guestLogin">
+        <text>游客登录（体验模式）</text>
+      </view>
     </view>
-  </view>
 
-  <view class="footer">
-    <text>测试账号：admin / 123456</text>
+    <view class="footer">
+      <text>© 2024 一条鱼餐厅</text>
+    </view>
   </view>
 </view>

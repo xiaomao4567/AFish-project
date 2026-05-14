@@ -2,6 +2,7 @@ package com.example.yitiaoyu.server.controller;
 
 import com.example.yitiaoyu.common.Result;
 import com.example.yitiaoyu.pojo.dto.LoginDTO;
+import com.example.yitiaoyu.pojo.dto.WechatLoginDTO;
 import com.example.yitiaoyu.pojo.vo.LoginVO;
 import com.example.yitiaoyu.server.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class AuthController {
     @PostMapping("/login")
     public Result<LoginVO> login(@RequestBody LoginDTO loginDTO) {
         LoginVO loginVO = authService.login(loginDTO);
+        return Result.success(loginVO);
+    }
+
+    @PostMapping("/wechat-login")
+    public Result<LoginVO> wechatLogin(@RequestBody WechatLoginDTO wechatLoginDTO) {
+        LoginVO loginVO = authService.wechatLogin(wechatLoginDTO);
         return Result.success(loginVO);
     }
 }

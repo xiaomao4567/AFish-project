@@ -64,26 +64,45 @@ const router = createRouter({
     routes
 })
 
-// 路由守卫
+const ONE_DAY_MS = 24 * 60 * 60 * 1000
+
+const checkLoginExpired = () => {
+    const loginTime = localStorage.getItem('loginTime')
+    if (!loginTime) {
+        return true
+    }
+    const now = Date.now()
+    const diff = now - parseInt(loginTime)
+    return diff > ONE_DAY_MS
+}
+
+const clearAuthData = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    localStorage.removeItem('loginTime')
+}
+
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('token')
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-    console.log('=== 路由守卫 ===')
-    console.log('目标路径:', to.path)
-    console.log('需要登录:', requiresAuth)
-    console.log('token存在:', !!token)
-
     if (requiresAuth && !token) {
-        // 需要登录但未登录，跳转登录页
-        console.log('未登录，跳转登录页')
         next('/login')
+    } else if (requiresAuth && token) {
+        if (checkLoginExpired()) {
+            clearAuthData()
+            next('/login')
+        } else {
+            next()
+        }
     } else if (to.path === '/login' && token) {
-        // 已登录访问登录页，跳转首页
-        console.log('已登录，跳转首页')
-        next('/')
+        if (checkLoginExpired()) {
+            clearAuthData()
+            next()
+        } else {
+            next('/')
+        }
     } else {
-        console.log('放行')
         next()
     }
 })
