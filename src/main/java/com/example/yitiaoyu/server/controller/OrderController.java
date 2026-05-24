@@ -7,6 +7,7 @@ import com.example.yitiaoyu.pojo.vo.OrderVO;
 import com.example.yitiaoyu.pojo.vo.PageVO;
 import com.example.yitiaoyu.server.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,17 @@ public class OrderController {
     @GetMapping("/table/{tableNumber}")
     public Result<List<OrderVO>> listByTable(@PathVariable Integer tableNumber) {
         return Result.success(orderService.listByTable(tableNumber));
+    }
+
+    @GetMapping("/my")
+    public Result<List<OrderVO>> listMyOrders(@RequestParam Long userId, @RequestParam Integer tableNumber) {
+        return Result.success(orderService.listByUserIdAndTableNumber(userId, tableNumber));
+    }
+
+    @PutMapping("/{id}/cancel")
+    public Result<Void> cancelOrder(@PathVariable Long id, @RequestBody CancelRequest cancelRequest) {
+        orderService.cancelOrder(id, cancelRequest.getCancelReason(), "USER");
+        return Result.success();
     }
 }
 
@@ -63,4 +75,17 @@ class OrderAdminController {
         orderService.updateStatus(id, status, role);
         return Result.success();
     }
+
+    @PutMapping("/{id}/cancel")
+    public Result<Void> cancelOrder(@PathVariable Long id, @RequestBody CancelRequest cancelRequest, HttpServletRequest request) {
+        String token = request.getHeader("Authorization").substring(7);
+        String role = jwtUtil.getRole(token);
+        orderService.cancelOrder(id, cancelRequest.getCancelReason(), role);
+        return Result.success();
+    }
+}
+
+@Data
+class CancelRequest {
+    private String cancelReason;
 }

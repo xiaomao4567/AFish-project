@@ -96,6 +96,7 @@ Page({
   guestLogin: function () {
     wx.setStorageSync('token', 'guest_token')
     wx.setStorageSync('username', '游客')
+    wx.setStorageSync('userId', 0)
     wx.setStorageSync('tokenExpireTime', Date.now() + 3600000)
     wx.showToast({ title: '游客登录成功', icon: 'success' })
     setTimeout(() => {

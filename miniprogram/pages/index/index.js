@@ -481,10 +481,40 @@ Page({
 
   selectTable: function (e) {
     const tableNo = e.currentTarget.dataset.table
+    const oldTableNo = this.data.tableNo
+    
+    if (oldTableNo && oldTableNo !== tableNo) {
+      wx.showModal({
+        title: '切换桌号',
+        content: `是否清空当前桌号 ${oldTableNo} 的购物车？`,
+        success: (res) => {
+          if (res.confirm) {
+            this.confirmTableSwitch(tableNo, true)
+          } else if (res.cancel) {
+            this.confirmTableSwitch(tableNo, false)
+          }
+        }
+      })
+    } else {
+      this.confirmTableSwitch(tableNo, false)
+    }
+  },
+
+  confirmTableSwitch: function (tableNo, clearCart) {
+    if (clearCart) {
+      const oldTableNo = this.data.tableNo
+      wx.removeStorageSync('cart_' + oldTableNo)
+      App.globalData.cartCount = 0
+      App.globalData.cartTotal = 0
+    }
+    
     this.setData({ tableNo: tableNo, showTableModal: false })
     App.globalData.tableNo = tableNo
     wx.setStorageSync('tableNo', tableNo)
-    wx.showToast({ title: `已选择桌号 ${tableNo}`, icon: 'success' })
+    
+    this.loadCartCount()
+    
+    wx.showToast({ title: `已切换至 ${tableNo}号桌`, icon: 'success' })
   },
 
   loadCartCount: function () {

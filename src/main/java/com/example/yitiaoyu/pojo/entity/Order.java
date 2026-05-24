@@ -22,9 +22,12 @@ public class Order {
     private BigDecimal totalAmount;
     private String status;
     private String remark;
+    private String cancelReason;
+    private Long userId;
     private LocalDateTime createTime;
     private LocalDateTime payTime;
     private LocalDateTime prepareTime;
     private LocalDateTime finishTime;
+    private LocalDateTime cancelTime;
     private LocalDateTime updateTime;
 }

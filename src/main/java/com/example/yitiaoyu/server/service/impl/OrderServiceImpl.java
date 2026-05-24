@@ -3,6 +3,7 @@ package com.example.yitiaoyu.server.service.impl;
 import com.example.yitiaoyu.common.BusinessException;
 import com.example.yitiaoyu.common.UserContext;
 import com.example.yitiaoyu.pojo.dto.OrderDTO;
+import com.example.yitiaoyu.pojo.dto.OrderItemDTO;
 import com.example.yitiaoyu.pojo.entity.*;
 import com.example.yitiaoyu.pojo.vo.OrderItemVO;
 import com.example.yitiaoyu.pojo.vo.OrderVO;
@@ -42,52 +43,76 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderVO create(OrderDTO orderDTO) {
-        log.info("【订单创建】用户: {} 创建订单 - tableNumber: {}", UserContext.getUsername(), orderDTO.getTableNumber());
-        Cart cart = cartMapper.selectByTableNumber(orderDTO.getTableNumber());
-        if (cart == null) {
+        log.info("【订单创建】用户ID: {} 创建订单 - tableNumber: {}", orderDTO.getUserId(), orderDTO.getTableNumber());
+        
+        List<OrderItemDTO> items = orderDTO.getItems();
+        if (items == null || items.isEmpty()) {
             log.warn("【订单创建】购物车为空 - tableNumber: {}", orderDTO.getTableNumber());
             throw new BusinessException("购物车为空");
         }
-        List<CartItem> cartItems = cartItemMapper.selectByCartId(cart.getId());
-        if (cartItems.isEmpty()) {
-            log.warn("【订单创建】购物车为空 - tableNumber: {}", orderDTO.getTableNumber());
-            throw new BusinessException("购物车为空");
-        }
+        
         String orderNo = generateOrderNo();
-        BigDecimal totalAmount = cartItems.stream()
+        BigDecimal totalAmount = items.stream()
                 .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
         Order order = new Order();
         order.setOrderNo(orderNo);
         order.setTableNumber(orderDTO.getTableNumber());
         order.setTotalAmount(totalAmount);
-        order.setStatus("已支付");
+        order.setStatus("PAID");
         order.setRemark(orderDTO.getRemark());
+        order.setUserId(orderDTO.getUserId());
         order.setCreateTime(LocalDateTime.now());
         order.setPayTime(LocalDateTime.now());
         order.setUpdateTime(LocalDateTime.now());
         orderMapper.insert(order);
+        
         log.info("【订单创建】订单创建成功 - orderId: {}, orderNo: {}, totalAmount: {}", 
                 order.getId(), orderNo, totalAmount);
-        for (CartItem cartItem : cartItems) {
+        
+        for (OrderItemDTO item : items) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrderId(order.getId());
-            orderItem.setDishId(cartItem.getDishId());
-            Dish dish = dishMapper.selectById(cartItem.getDishId());
-            if (dish != null) {
-                orderItem.setDishName(dish.getName());
-                orderItem.setImage(dish.getImage());
-            }
-            orderItem.setFlavor(cartItem.getFlavor());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(cartItem.getPrice());
+            orderItem.setDishId(item.getDishId());
+            orderItem.setDishName(item.getDishName());
+            orderItem.setImage(item.getImage());
+            orderItem.setFlavor(item.getFlavor());
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setPrice(item.getPrice());
             orderItem.setCreateTime(LocalDateTime.now());
             orderItemMapper.insert(orderItem);
         }
-        cartItemMapper.deleteByCartId(cart.getId());
-        cartMapper.deleteById(cart.getId());
-        log.info("【订单创建】清空购物车 - tableNumber: {}", orderDTO.getTableNumber());
+        
+        log.info("【订单创建】订单创建完成 - orderId: {}", order.getId());
         return getById(order.getId());
+    }
+    
+    @Override
+    @Transactional
+    public void cancelOrder(Long id, String cancelReason, String role) {
+        log.info("【订单取消】用户: {} 取消订单 - orderId: {}, cancelReason: {}, role: {}", 
+                UserContext.getUsername(), id, cancelReason, role);
+        
+        Order order = orderMapper.selectById(id);
+        if (order == null) {
+            log.warn("【订单取消】订单不存在 - orderId: {}", id);
+            throw new BusinessException("订单不存在");
+        }
+        
+        String currentStatus = order.getStatus();
+        if (!("PAID".equals(currentStatus) || "PREPARING".equals(currentStatus))) {
+            log.warn("【订单取消】订单状态不允许取消 - orderId: {}, currentStatus: {}", id, currentStatus);
+            throw new BusinessException("当前订单状态不允许取消");
+        }
+        
+        order.setStatus("CANCELLED");
+        order.setCancelReason(cancelReason);
+        order.setCancelTime(LocalDateTime.now());
+        order.setUpdateTime(LocalDateTime.now());
+        orderMapper.updateById(order);
+        
+        log.info("【订单取消】订单取消成功 - orderId: {}", id);
     }
 
     @Override
@@ -150,30 +175,18 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("订单不存在");
         }
         String currentStatus = order.getStatus();
-        if ("ADMIN".equals(role)) {
-            if ("已支付".equals(currentStatus) && "待出餐".equals(newStatus)) {
-                order.setStatus(newStatus);
-                order.setPrepareTime(LocalDateTime.now());
-            } else if ("待出餐".equals(currentStatus) && "已出餐".equals(newStatus)) {
-                order.setStatus(newStatus);
-                order.setFinishTime(LocalDateTime.now());
-            } else {
-                log.warn("【订单状态更新】无效的状态变更 - currentStatus: {}, newStatus: {}", currentStatus, newStatus);
-                throw new BusinessException("无效的状态变更");
-            }
-        } else {
-            if (!("已支付".equals(currentStatus) && "待出餐".equals(newStatus)) &&
-                    !("待出餐".equals(currentStatus) && "已出餐".equals(newStatus))) {
-                log.warn("【订单状态更新】无权限进行此状态变更 - role: {}, currentStatus: {}, newStatus: {}", role, currentStatus, newStatus);
-                throw new BusinessException("无权限进行此状态变更");
-            }
+        
+        if ("PAID".equals(currentStatus) && "PREPARING".equals(newStatus)) {
             order.setStatus(newStatus);
-            if ("待出餐".equals(newStatus)) {
-                order.setPrepareTime(LocalDateTime.now());
-            } else if ("已出餐".equals(newStatus)) {
-                order.setFinishTime(LocalDateTime.now());
-            }
+            order.setPrepareTime(LocalDateTime.now());
+        } else if ("PREPARING".equals(currentStatus) && "SERVED".equals(newStatus)) {
+            order.setStatus(newStatus);
+            order.setFinishTime(LocalDateTime.now());
+        } else {
+            log.warn("【订单状态更新】无效的状态变更 - currentStatus: {}, newStatus: {}", currentStatus, newStatus);
+            throw new BusinessException("无效的状态变更");
         }
+        
         order.setUpdateTime(LocalDateTime.now());
         orderMapper.updateById(order);
         log.info("【订单状态更新】订单状态更新成功 - orderId: {}, status: {}", id, newStatus);
@@ -181,9 +194,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderVO> listByTable(Integer tableNumber) {
-        log.info("【订单查询】用户: {} 查询桌号订单 - tableNumber: {}", UserContext.getUsername(), tableNumber);
+        log.info("【订单查询】查询桌号订单 - tableNumber: {}", tableNumber);
         List<Order> orders = orderMapper.selectByTableNumber(tableNumber);
         log.info("【订单查询】查询到桌号订单数量: {}", orders.size());
+        return orders.stream().map(this::convertToVO).toList();
+    }
+
+    @Override
+    public List<OrderVO> listByUserIdAndTableNumber(Long userId, Integer tableNumber) {
+        log.info("【订单查询】查询用户订单 - userId: {}, tableNumber: {}", userId, tableNumber);
+        List<Order> orders = orderMapper.selectByUserIdAndTableNumber(userId, tableNumber);
+        log.info("【订单查询】查询到用户订单数量: {}", orders.size());
         return orders.stream().map(this::convertToVO).toList();
     }
 
@@ -200,10 +221,13 @@ public class OrderServiceImpl implements OrderService {
         vo.setTotalAmount(order.getTotalAmount());
         vo.setStatus(order.getStatus());
         vo.setRemark(order.getRemark());
+        vo.setCancelReason(order.getCancelReason());
+        vo.setUserId(order.getUserId());
         vo.setCreateTime(order.getCreateTime());
         vo.setPayTime(order.getPayTime());
         vo.setPrepareTime(order.getPrepareTime());
         vo.setFinishTime(order.getFinishTime());
+        vo.setCancelTime(order.getCancelTime());
         List<OrderItem> items = orderItemMapper.selectByOrderId(order.getId());
         vo.setItems(items.stream().map(this::convertItemToVO).toList());
         return vo;

@@ -9,10 +9,13 @@
         <result column="total_amount" property="totalAmount"/>
         <result column="status" property="status"/>
         <result column="remark" property="remark"/>
+        <result column="cancel_reason" property="cancelReason"/>
+        <result column="user_id" property="userId"/>
         <result column="create_time" property="createTime"/>
         <result column="pay_time" property="payTime"/>
         <result column="prepare_time" property="prepareTime"/>
         <result column="finish_time" property="finishTime"/>
+        <result column="cancel_time" property="cancelTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
@@ -21,15 +24,16 @@
     </select>
 
     <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.Order" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO orders (order_no, table_number, total_amount, status, remark, create_time, pay_time, prepare_time, finish_time, update_time) 
-        VALUES (#{orderNo}, #{tableNumber}, #{totalAmount}, #{status}, #{remark}, #{createTime}, #{payTime}, #{prepareTime}, #{finishTime}, #{updateTime})
+        INSERT INTO orders (order_no, table_number, total_amount, status, remark, user_id, create_time, pay_time, prepare_time, finish_time, update_time) 
+        VALUES (#{orderNo}, #{tableNumber}, #{totalAmount}, #{status}, #{remark}, #{userId}, #{createTime}, #{payTime}, #{prepareTime}, #{finishTime}, #{updateTime})
     </insert>
 
     <update id="updateById" parameterType="com.example.yitiaoyu.pojo.entity.Order">
         UPDATE orders 
         SET order_no = #{orderNo}, table_number = #{tableNumber}, total_amount = #{totalAmount}, 
-            status = #{status}, remark = #{remark}, prepare_time = #{prepareTime}, 
-            finish_time = #{finishTime}, update_time = #{updateTime} 
+            status = #{status}, remark = #{remark}, cancel_reason = #{cancelReason},
+            user_id = #{userId}, prepare_time = #{prepareTime}, finish_time = #{finishTime}, 
+            cancel_time = #{cancelTime}, update_time = #{updateTime} 
         WHERE id = #{id}
     </update>
 
@@ -45,6 +49,12 @@
 
     <select id="selectByTableNumber" parameterType="Integer" resultMap="OrderResultMap">
         SELECT * FROM orders WHERE table_number = #{tableNumber} ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByUserIdAndTableNumber" resultMap="OrderResultMap">
+        SELECT * FROM orders 
+        WHERE user_id = #{userId} AND table_number = #{tableNumber} 
+        ORDER BY create_time DESC
     </select>
 
     <select id="sumTotalAmountByStatusAndTimeRange" resultType="java.math.BigDecimal">

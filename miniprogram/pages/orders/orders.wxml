@@ -48,8 +48,8 @@
       >
         <view class="order-header">
           <text class="order-no">订单号：{{item.orderNo}}</text>
-          <text class="order-status" :class="getStatusClass(item.status)">
-            {{getStatusText(item.status)}}
+          <text class="order-status {{item.status === 'PAID' ? 'paid' : item.status === 'PREPARING' ? 'preparing' : item.status === 'SERVED' ? 'served' : item.status === 'CANCELLED' ? 'cancelled' : 'pending'}}">
+            {{item.status === 'PAID' ? '已支付' : item.status === 'PREPARING' ? '制作中' : item.status === 'SERVED' ? '已上菜' : item.status === 'CANCELLED' ? '已取消' : '待支付'}}
           </text>
         </view>
         
@@ -73,22 +73,18 @@
           <view class="order-actions">
             <view 
               class="action-btn cancel" 
-              wx:if="{{item.status === 'PENDING'}}" 
+              wx:if="{{item.status === 'PAID' || item.status === 'PREPARING'}}" 
               bindtap="cancelOrder"
               data-order-no="{{item.orderNo}}"
             >
               <text>取消订单</text>
             </view>
-            <view 
-              class="action-btn pay" 
-              wx:if="{{item.status === 'PENDING'}}" 
-              bindtap="payOrder"
-              data-order-no="{{item.orderNo}}"
-            >
-              <text>去支付</text>
+            <view class="action-btn done" wx:if="{{item.status === 'SERVED' || item.status === 'CANCELLED'}}">
+              <text wx:if="{{item.status === 'SERVED'}}">已完成</text>
+              <text wx:if="{{item.status === 'CANCELLED'}}">已取消</text>
             </view>
-            <view class="action-btn done" wx:if="{{item.status === 'SERVED'}}">
-              <text>已完成</text>
+            <view class="action-btn preparing" wx:if="{{item.status === 'PREPARING'}}">
+              <text>制作中</text>
             </view>
           </view>
         </view>
@@ -141,8 +137,8 @@
         </view>
         <view class="detail-row">
           <text class="detail-label">订单状态</text>
-          <text class="detail-value status" :class="getStatusClass(currentOrder.status)">
-            {{getStatusText(currentOrder.status)}}
+          <text class="detail-value status {{currentOrder.status === 'PAID' ? 'paid' : currentOrder.status === 'PREPARING' ? 'preparing' : currentOrder.status === 'SERVED' ? 'served' : currentOrder.status === 'CANCELLED' ? 'cancelled' : 'pending'}}">
+            {{currentOrder.status === 'PAID' ? '已支付' : currentOrder.status === 'PREPARING' ? '制作中' : currentOrder.status === 'SERVED' ? '已上菜' : currentOrder.status === 'CANCELLED' ? '已取消' : '待支付'}}
           </text>
         </view>
         <view class="detail-row" wx:if="{{currentOrder.remark}}">
@@ -173,19 +169,11 @@
       <view class="detail-footer">
         <view 
           class="footer-btn cancel" 
-          wx:if="{{currentOrder && currentOrder.status === 'PENDING'}}" 
+          wx:if="{{currentOrder && (currentOrder.status === 'PAID' || currentOrder.status === 'PREPARING')}}" 
           bindtap="cancelOrder"
           data-order-no="{{currentOrder.orderNo}}"
         >
           <text>取消订单</text>
-        </view>
-        <view 
-          class="footer-btn pay" 
-          wx:if="{{currentOrder && currentOrder.status === 'PENDING'}}" 
-          bindtap="payOrder"
-          data-order-no="{{currentOrder.orderNo}}"
-        >
-          <text>去支付</text>
         </view>
         <view class="footer-btn close" wx:else bindtap="hideDetailModal">
           <text>关闭</text>

@@ -13,4 +13,6 @@ public interface OrderService {
     OrderVO getById(Long id);
     void updateStatus(Long id, String newStatus, String role);
     List<OrderVO> listByTable(Integer tableNumber);
+    List<OrderVO> listByUserIdAndTableNumber(Long userId, Integer tableNumber);
+    void cancelOrder(Long id, String cancelReason, String role);
 }

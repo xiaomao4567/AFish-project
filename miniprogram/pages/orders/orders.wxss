@@ -190,6 +190,11 @@
   color: #999;
 }
 
+.order-status.cancelled {
+  background: #ffebee;
+  color: #f44336;
+}
+
 .order-items {
   border-top: 1rpx solid #f5f5f5;
   border-bottom: 1rpx solid #f5f5f5;
@@ -300,6 +305,14 @@
 
 .action-btn.done text {
   color: #999;
+}
+
+.action-btn.preparing {
+  background: linear-gradient(135deg, #FFE66D 0%, #FFA94D 100%);
+}
+
+.action-btn.preparing text {
+  color: #fff;
 }
 
 .loading {
@@ -439,6 +452,31 @@
   padding: 6rpx 16rpx;
   border-radius: 20rpx;
   font-size: 24rpx;
+}
+
+.detail-value.status.paid {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.detail-value.status.preparing {
+  background: #e3f2fd;
+  color: #2196f3;
+}
+
+.detail-value.status.served {
+  background: #f3e5f5;
+  color: #9c27b0;
+}
+
+.detail-value.status.cancelled {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.detail-value.status.pending {
+  background: #fff3e0;
+  color: #ff9800;
 }
 
 .detail-section {

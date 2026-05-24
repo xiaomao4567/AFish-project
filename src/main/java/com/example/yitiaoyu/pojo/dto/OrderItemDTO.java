@@ -6,16 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDTO {
-    private Integer tableNumber;
-    private String remark;
-    private Long userId;
-    private List<OrderItemDTO> items;
+public class OrderItemDTO {
+    private Long dishId;
+    private String dishName;
+    private String image;
+    private String flavor;
+    private Integer quantity;
+    private BigDecimal price;
+    private Boolean isCombo;
 }
-

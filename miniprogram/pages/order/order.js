@@ -6,7 +6,8 @@ Page({
     items: [],
     total: 0,
     remark: '',
-    expandedCombos: []
+    expandedCombos: [],
+    submitting: false
   },
 
   onLoad: function () {
@@ -50,27 +51,60 @@ Page({
       return
     }
 
-    const orderData = {
-      orderNo: 'YD' + Date.now(),
-      tableNo: this.data.tableNo,
-      items: this.data.items,
-      remark: this.data.remark,
-      totalAmount: this.data.total,
-      createTime: new Date().toLocaleString('zh-CN'),
-      status: 'PAID'
+    if (this.data.submitting) return
+
+    this.setData({ submitting: true })
+
+    const userId = wx.getStorageSync('userId')
+    if (!userId) {
+      wx.showToast({ title: '请先登录', icon: 'none' })
+      this.setData({ submitting: false })
+      wx.reLaunch({ url: '/pages/login/login' })
+      return
     }
 
-    const orders = wx.getStorageSync('orders_' + this.data.tableNo) || []
-    orders.unshift(orderData)
-    wx.setStorageSync('orders_' + this.data.tableNo, orders)
+    const orderItems = this.data.items.map(item => ({
+      dishId: item.dishId,
+      dishName: item.dishName || item.name,
+      image: item.image,
+      flavor: item.flavor,
+      quantity: item.quantity,
+      price: item.price,
+      isCombo: item.isCombo || false
+    }))
 
-    wx.setStorageSync('cart_' + this.data.tableNo, [])
-    
-    App.globalData.cartCount = 0
-    App.globalData.cartTotal = 0
+    wx.request({
+      url: 'http://127.0.0.1:8080/api/order/create',
+      method: 'POST',
+      header: { 'Content-Type': 'application/json' },
+      data: {
+        tableNumber: parseInt(this.data.tableNo),
+        remark: this.data.remark,
+        userId: userId,
+        items: orderItems
+      },
+      success: (res) => {
+        if (res.data.code === 200) {
+          const tableNo = this.data.tableNo
+          wx.setStorageSync('cart_' + tableNo, [])
+          
+          App.globalData.cartCount = 0
+          App.globalData.cartTotal = 0
 
-    wx.redirectTo({ 
-      url: `/pages/success/success?orderNo=${orderData.orderNo}&total=${this.data.total}` 
+          wx.redirectTo({ 
+            url: `/pages/success/success?orderNo=${res.data.data.orderNo}&total=${this.data.total}` 
+          })
+        } else {
+          wx.showToast({ title: res.data.message || '下单失败', icon: 'none' })
+        }
+      },
+      fail: (err) => {
+        console.error('下单失败', err)
+        wx.showToast({ title: '网络错误，请稍后重试', icon: 'none' })
+      },
+      complete: () => {
+        this.setData({ submitting: false })
+      }
     })
   }
 })

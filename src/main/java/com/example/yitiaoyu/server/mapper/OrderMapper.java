@@ -22,6 +22,8 @@ public interface OrderMapper {
 
     List<Order> selectByTableNumber(Integer tableNumber);
 
+    List<Order> selectByUserIdAndTableNumber(Long userId, Integer tableNumber);
+
     BigDecimal sumTotalAmountByStatusAndTimeRange(String status, LocalDateTime startTime, LocalDateTime endTime);
 
     Integer countByStatusAndTimeRange(String status, LocalDateTime startTime, LocalDateTime endTime);

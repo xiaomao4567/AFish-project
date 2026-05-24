@@ -20,8 +20,9 @@
     </view>
   </view>
 
-  <view class="table-tag" wx:else>
+  <view class="table-tag" wx:else bindtap="showTableModal">
     <text class="table-text">🪑 桌号：{{tableNo}}</text>
+    <text class="change-icon">🔄</text>
   </view>
 
   <view class="search-bar">
