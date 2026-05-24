@@ -4,11 +4,8 @@ server:
 spring:
   application:
     name: AFish-project
-  datasource:
-    url: jdbc:mysql://localhost:3306/afish?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: dev
   sql:
     init:
       mode: always
@@ -20,6 +17,3 @@ mybatis:
     map-underscore-to-camel-case: true
     use-generated-keys: true
     key-property: id
-jwt:
-  secret: yitiaoyu-jwt-secret-key-2024-secure-enough-32bytes
-  expire: 3600000

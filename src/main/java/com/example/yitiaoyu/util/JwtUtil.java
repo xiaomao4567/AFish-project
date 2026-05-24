@@ -1,4 +1,4 @@
-package com.example.yitiaoyu.common;
+package com.example.yitiaoyu.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

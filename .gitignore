@@ -1,2 +1,20 @@
 # 项目排除路径
 /target/
+
+# 敏感配置文件
+/src/main/resources/application-dev.yml
+
+# IDE配置
+.idea/
+*.iml
+
+# 日志文件
+*.log
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 微信小程序开发者工具缓存
+/miniprogram/.project
+/miniprogram/.settings/

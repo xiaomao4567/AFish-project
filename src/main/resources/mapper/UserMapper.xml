@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.yitiaoyu.server.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.example.yitiaoyu.pojo.entity.User">
+        <id column="id" property="id"/>
+        <result column="open_id" property="openId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="selectByOpenId" resultMap="UserResultMap">
+        SELECT id, open_id, nickname, avatar_url, created_at, updated_at
+        FROM user
+        WHERE open_id = #{openId}
+    </select>
+
+    <select id="selectById" resultMap="UserResultMap">
+        SELECT id, open_id, nickname, avatar_url, created_at, updated_at
+        FROM user
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.example.yitiaoyu.pojo.entity.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user (open_id, nickname, avatar_url, created_at, updated_at)
+        VALUES (#{openId}, #{nickname}, #{avatarUrl}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="updateByOpenId" parameterType="com.example.yitiaoyu.pojo.entity.User">
+        UPDATE user
+        SET nickname = #{nickname},
+            avatar_url = #{avatarUrl},
+            updated_at = #{updatedAt}
+        WHERE open_id = #{openId}
+    </update>
+
+</mapper>

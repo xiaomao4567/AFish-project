@@ -1,4 +1,4 @@
-package com.example.yitiaoyu.common;
+package com.example.yitiaoyu.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

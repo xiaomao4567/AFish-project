@@ -54,14 +54,34 @@
     <el-dialog
       v-model="dialogVisible"
       :title="isEdit ? '编辑套餐' : '新增套餐'"
-      width="800px"
+      width="95%"
+      max-width="900px"
     >
       <el-form :model="form" :rules="rules" ref="formRef" label-width="100px">
         <el-form-item label="套餐名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入套餐名称" />
         </el-form-item>
         <el-form-item label="图片" prop="image">
-          <el-input v-model="form.image" placeholder="请输入图片URL" />
+          <div class="upload-container">
+            <div class="image-preview" v-if="form.image">
+              <el-image :src="form.image" fit="cover" style="width: 120px; height: 120px; border-radius: 8px" />
+              <div class="image-overlay" @click="form.image = ''">
+                <el-icon><Delete /></el-icon>
+              </div>
+            </div>
+            <el-upload
+              v-else
+              class="image-uploader"
+              :show-file-list="false"
+              :before-upload="beforeImageUpload"
+              :http-request="handleImageUpload"
+            >
+              <el-icon class="upload-icon"><Plus /></el-icon>
+              <div class="upload-text">点击上传</div>
+            </el-upload>
+            <div class="upload-tip">支持 JPG、PNG 格式，建议尺寸 400x400</div>
+          </div>
+          <el-input v-if="false" v-model="form.image" />
         </el-form-item>
         <el-form-item label="价格" prop="price">
           <el-input-number v-model="form.price" :min="0" :precision="2" style="width: 100%" />
@@ -79,20 +99,29 @@
               </el-button>
             </div>
             <el-table :data="form.items" style="width: 100%; margin-top: 10px" v-if="form.items.length > 0">
-              <el-table-column label="菜品名称" width="150" />
-              <el-table-column label="口味" width="120" />
-              <el-table-column label="单价" width="100" align="right">
-                <template #default="{ row }">¥{{ row.price?.toFixed(2) }}</template>
-              </el-table-column>
-              <el-table-column label="数量" width="100">
-                <template #default="{ row, $index }">
-                  <el-input-number v-model="form.items[$index].quantity" :min="1" style="width: 80px" />
+              <el-table-column label="图片" width="60">
+                <template #default="{ row }">
+                  <el-image :src="row.image || 'https://via.placeholder.com/32'" fit="cover" style="width: 32px; height: 32px; border-radius: 4px" />
                 </template>
               </el-table-column>
-              <el-table-column label="小计" width="100" align="right">
+              <el-table-column prop="dishName" label="菜品名称" min-width="100" />
+              <el-table-column prop="flavor" label="口味" min-width="80">
+                <template #default="{ row }">
+                  <span>{{ row.flavor || '默认' }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="price" label="单价" width="80" align="right">
+                <template #default="{ row }">¥{{ row.price?.toFixed(2) }}</template>
+              </el-table-column>
+              <el-table-column prop="quantity" label="数量" width="80">
+                <template #default="{ row, $index }">
+                  <el-input-number v-model="form.items[$index].quantity" :min="1" style="width: 70px" />
+                </template>
+              </el-table-column>
+              <el-table-column label="小计" width="80" align="right">
                 <template #default="{ row }">¥{{ (row.price * row.quantity)?.toFixed(2) }}</template>
               </el-table-column>
-              <el-table-column label="操作" width="80">
+              <el-table-column label="操作" width="60">
                 <template #default="{ $index }">
                   <el-button type="danger" link size="small" @click="removeItem($index)">删除</el-button>
                 </template>
@@ -177,13 +206,14 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Plus, ShoppingBag } from '@element-plus/icons-vue'
+import { Plus, ShoppingBag, Delete } from '@element-plus/icons-vue'
 import axios from '../../utils/axios'
 
 const loading = ref(false)
 const dialogVisible = ref(false)
 const isEdit = ref(false)
 const formRef = ref(null)
+const uploading = ref(false)
 
 const dishSelectorVisible = ref(false)
 const flavorSelectorVisible = ref(false)
@@ -267,6 +297,49 @@ const showEditDialog = (row) => {
     status: row.status
   })
   dialogVisible.value = true
+}
+
+const beforeImageUpload = (file) => {
+  const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
+  const isLt5M = file.size / 1024 / 1024 < 5
+
+  if (!isImage) {
+    ElMessage.error('只能上传 JPG/PNG 格式的图片!')
+    return false
+  }
+  if (!isLt5M) {
+    ElMessage.error('图片大小不能超过 5MB!')
+    return false
+  }
+  return true
+}
+
+const handleImageUpload = async (options) => {
+  const { file } = options
+  uploading.value = true
+  
+  try {
+    const formData = new FormData()
+    formData.append('file', file)
+    
+    const res = await axios.post('/admin/common/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    
+    if (res.code === 200) {
+      form.image = res.data
+      ElMessage.success('图片上传成功')
+    } else {
+      ElMessage.error(res.message || '图片上传失败')
+    }
+  } catch (error) {
+    ElMessage.error('图片上传失败')
+    console.error('上传失败:', error)
+  } finally {
+    uploading.value = false
+  }
 }
 
 const showDishSelector = () => {
@@ -438,5 +511,75 @@ onMounted(() => {
 .dish-selector {
   max-height: 400px;
   overflow-y: auto;
+}
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.image-preview {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: 8px;
+}
+
+.image-preview:hover .image-overlay {
+  opacity: 1;
+}
+
+.image-overlay .el-icon {
+  font-size: 24px;
+  color: white;
+}
+
+.image-uploader {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.image-uploader:hover {
+  border-color: #409eff;
+}
+
+.upload-icon {
+  font-size: 28px;
+  color: #8c939d;
+}
+
+.upload-text {
+  font-size: 12px;
+  color: #8c939d;
+  margin-top: 4px;
+}
+
+.upload-tip {
+  font-size: 12px;
+  color: #999;
 }
 </style>

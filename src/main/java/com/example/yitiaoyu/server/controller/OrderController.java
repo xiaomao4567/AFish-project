@@ -1,6 +1,6 @@
 package com.example.yitiaoyu.server.controller;
 
-import com.example.yitiaoyu.common.JwtUtil;
+import com.example.yitiaoyu.util.JwtUtil;
 import com.example.yitiaoyu.common.Result;
 import com.example.yitiaoyu.pojo.dto.OrderDTO;
 import com.example.yitiaoyu.pojo.vo.OrderVO;

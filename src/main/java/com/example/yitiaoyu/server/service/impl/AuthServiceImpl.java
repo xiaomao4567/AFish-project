@@ -1,7 +1,7 @@
 package com.example.yitiaoyu.server.service.impl;
 
 import com.example.yitiaoyu.common.BusinessException;
-import com.example.yitiaoyu.common.JwtUtil;
+import com.example.yitiaoyu.util.JwtUtil;
 import com.example.yitiaoyu.pojo.dto.LoginDTO;
 import com.example.yitiaoyu.pojo.dto.WechatLoginDTO;
 import com.example.yitiaoyu.pojo.entity.Employee;
