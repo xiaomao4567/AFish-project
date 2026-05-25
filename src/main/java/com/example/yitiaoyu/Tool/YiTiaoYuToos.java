@@ -87,7 +87,7 @@ public class YiTiaoYuToos {
     }
 
     @Tool(description = "查询店内的套餐详情信息，返回套餐详情和价格")
-    private String getComboInfo(
+    public String getComboInfo(
             @ToolParam(description ="套餐菜品名称，例如：重庆豆花烤鱼套餐" ) String comboName
     ){
         try {
