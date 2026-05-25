@@ -13,7 +13,13 @@
     <view class="detail-info">
       <view class="detail-header">
         <text class="detail-name">{{item.name}}</text>
-        <text class="detail-tag" wx:if="{{isCombo}}">套餐</text>
+        <view class="detail-tags">
+          <text class="detail-tag" wx:if="{{isCombo}}">套餐</text>
+          <view class="recommend-badge" wx:if="{{item.recommendIndex}}">
+            <text class="recommend-star">★</text>
+            <text class="recommend-value">{{item.recommendIndex}}</text>
+          </view>
+        </view>
       </view>
       
       <view class="detail-price">

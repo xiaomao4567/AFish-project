@@ -56,8 +56,8 @@
 
 .detail-header {
   display: flex;
-  align-items: center;
-  gap: 16rpx;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .detail-name {
@@ -66,12 +66,38 @@
   color: #333;
 }
 
+.detail-tags {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
 .detail-tag {
   background: linear-gradient(135deg, #ffc107 0%, #ffeb3b 100%);
   color: #fff;
   font-size: 22rpx;
   padding: 6rpx 16rpx;
   border-radius: 20rpx;
+}
+
+.recommend-badge {
+  display: flex;
+  align-items: center;
+  padding: 4rpx 12rpx;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  border-radius: 16rpx;
+}
+
+.recommend-star {
+  font-size: 22rpx;
+  color: #fff;
+  margin-right: 4rpx;
+}
+
+.recommend-value {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #fff;
 }
 
 .detail-price {

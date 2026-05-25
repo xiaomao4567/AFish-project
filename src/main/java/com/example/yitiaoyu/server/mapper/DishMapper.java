@@ -3,6 +3,7 @@ package com.example.yitiaoyu.server.mapper;
 import com.example.yitiaoyu.pojo.entity.Dish;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -10,6 +11,9 @@ import java.util.List;
 public interface DishMapper {
 
     Dish selectById(Long id);
+
+    @Select("select * from dish where name like concat('%',#{name},'%')")
+    Dish queryByName(String name);
 
     void insert(Dish dish);
 

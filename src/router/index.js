@@ -54,6 +54,12 @@ const routes = [
                 name: 'Employee',
                 component: () => import('../views/employee/EmployeeList.vue'),
                 meta: { title: '员工管理', icon: 'User' }
+            },
+            {
+                path: 'agent',
+                name: 'Agent',
+                component: () => import('../views/agent/AgentChat.vue'),
+                meta: { title: 'AI客服', icon: 'ChatDotRound' }
             }
         ]
     }

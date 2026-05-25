@@ -241,7 +241,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=spicy%20grilled%20fish%20with%20red%20chili%20peppers%20and%20vegetables%20on%20plate%20food%20photography&image_size=landscape_4_3',
         flavors: '麻辣,微辣,酱香',
         categoryId: 2,
-        status: 1
+        status: 1,
+        recommendIndex: 5
       },
       {
         id: 2,
@@ -251,7 +252,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=garlic%20grilled%20fish%20with%20fresh%20herbs%20on%20plate%20food%20photography&image_size=landscape_4_3',
         flavors: '蒜香,原味',
         categoryId: 2,
-        status: 1
+        status: 1,
+        recommendIndex: 4
       },
       {
         id: 3,
@@ -261,7 +263,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=sour%20vegetable%20grilled%20fish%20chinese%20style%20food%20photography&image_size=landscape_4_3',
         flavors: '酸菜',
         categoryId: 2,
-        status: 1
+        status: 1,
+        recommendIndex: 4
       },
       {
         id: 4,
@@ -271,7 +274,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=spicy%20garlic%20shrimp%20chinese%20style%20food%20photography&image_size=landscape_4_3',
         flavors: '香辣',
         categoryId: 3,
-        status: 1
+        status: 1,
+        recommendIndex: 5
       },
       {
         id: 5,
@@ -281,7 +285,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=spicy%20dry%20pot%20frog%20legs%20chinese%20style%20food%20photography&image_size=landscape_4_3',
         flavors: '麻辣,微辣',
         categoryId: 3,
-        status: 1
+        status: 1,
+        recommendIndex: 3
       },
       {
         id: 6,
@@ -291,7 +296,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=shredded%20potato%20salad%20chinese%20style%20food%20photography&image_size=landscape_4_3',
         flavors: '酸辣',
         categoryId: 6,
-        status: 1
+        status: 1,
+        recommendIndex: 5
       },
       {
         id: 7,
@@ -301,7 +307,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=cold%20wood%20ear%20mushroom%20salad%20chinese%20style%20food%20photography&image_size=landscape_4_3',
         flavors: '原味',
         categoryId: 6,
-        status: 1
+        status: 1,
+        recommendIndex: 3
       },
       {
         id: 8,
@@ -311,7 +318,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=egg%20fried%20rice%20chinese%20style%20food%20photography&image_size=landscape_4_3',
         flavors: '原味',
         categoryId: 5,
-        status: 1
+        status: 1,
+        recommendIndex: 4
       },
       {
         id: 9,
@@ -321,7 +329,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=white%20rice%20in%20bowl%20food%20photography&image_size=landscape_4_3',
         flavors: '原味',
         categoryId: 5,
-        status: 1
+        status: 1,
+        recommendIndex: 3
       },
       {
         id: 10,
@@ -331,7 +340,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=sour%20plum%20drink%20chinese%20style%20beverage%20photography&image_size=landscape_4_3',
         flavors: '原味',
         categoryId: 7,
-        status: 1
+        status: 1,
+        recommendIndex: 5
       },
       {
         id: 11,
@@ -341,7 +351,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=fresh%20orange%20juice%20in%20glass%20beverage%20photography&image_size=landscape_4_3',
         flavors: '原味',
         categoryId: 7,
-        status: 1
+        status: 1,
+        recommendIndex: 4
       },
       {
         id: 12,
@@ -351,7 +362,8 @@ Page({
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=sichuan%20boiled%20beef%20in%20chili%20oil%20chinese%20food%20photography&image_size=landscape_4_3',
         flavors: '麻辣,微辣',
         categoryId: 3,
-        status: 1
+        status: 1,
+        recommendIndex: 4
       }
     ]
 
@@ -386,6 +398,7 @@ Page({
         price: 168,
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=two%20person%20grilled%20fish%20meal%20set%20with%20side%20dishes%20food%20photography&image_size=landscape_4_3',
         status: 1,
+        recommendIndex: 5,
         items: [
           { dishId: 1, dishName: '麻辣烤鱼', flavor: '麻辣', quantity: 1, price: 88 },
           { dishId: 6, dishName: '酸辣土豆丝', flavor: '原味', quantity: 1, price: 18 },
@@ -399,6 +412,7 @@ Page({
         price: 328,
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=four%20person%20grilled%20fish%20feast%20meal%20set%20chinese%20restaurant%20food%20photography&image_size=landscape_4_3',
         status: 1,
+        recommendIndex: 5,
         items: [
           { dishId: 1, dishName: '麻辣烤鱼', flavor: '麻辣', quantity: 1, price: 88 },
           { dishId: 2, dishName: '蒜香烤鱼', flavor: '蒜香', quantity: 1, price: 88 },
@@ -415,6 +429,7 @@ Page({
         price: 268,
         image: 'https://neeko-copilot.bytedance.net/api/text_to_image?prompt=family%20dinner%20set%20with%20grilled%20fish%20and%20various%20dishes%20food%20photography&image_size=landscape_4_3',
         status: 1,
+        recommendIndex: 4,
         items: [
           { dishId: 3, dishName: '酸菜烤鱼', flavor: '酸菜', quantity: 1, price: 88 },
           { dishId: 4, dishName: '香辣虾', flavor: '香辣', quantity: 1, price: 68 },

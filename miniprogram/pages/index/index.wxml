@@ -62,7 +62,13 @@
       >
         <image class="dish-image" src="{{item.image}}" mode="aspectFill" />
         <view class="dish-info">
-          <text class="dish-name">{{item.name}}</text>
+          <view class="dish-header">
+            <text class="dish-name">{{item.name}}</text>
+            <view class="recommend-badge" wx:if="{{item.recommendIndex}}">
+              <text class="recommend-star">★</text>
+              <text class="recommend-value">{{item.recommendIndex}}</text>
+            </view>
+          </view>
           <text class="dish-desc">{{item.description}}</text>
           <view class="dish-bottom">
             <text class="dish-price">¥{{item.price}}</text>
@@ -83,7 +89,13 @@
       >
         <image class="combo-image" src="{{item.image}}" mode="aspectFill" />
         <view class="combo-info">
-          <text class="combo-name">{{item.name}}</text>
+          <view class="combo-header">
+            <text class="combo-name">{{item.name}}</text>
+            <view class="recommend-badge" wx:if="{{item.recommendIndex}}">
+              <text class="recommend-star">★</text>
+              <text class="recommend-value">{{item.recommendIndex}}</text>
+            </view>
+          </view>
           <text class="combo-desc">{{item.description}}</text>
           <view class="combo-items">
             <text wx:for="{{item.items}}" wx:key="index" wx:for-item="comboItem" class="combo-item">

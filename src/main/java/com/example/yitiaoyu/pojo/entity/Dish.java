@@ -22,6 +22,7 @@ public class Dish {
     private String flavors;
     private BigDecimal price;
     private Integer status;
+    private Integer recommendIndex;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

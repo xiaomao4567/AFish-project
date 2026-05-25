@@ -285,11 +285,17 @@ page {
   padding: 20rpx;
 }
 
+.dish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
 .dish-name {
   font-size: 30rpx;
   font-weight: bold;
   color: #333;
-  margin-bottom: 8rpx;
 }
 
 .dish-desc {
@@ -348,11 +354,17 @@ page {
   flex-direction: column;
 }
 
+.combo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
 .combo-name {
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
-  margin-bottom: 8rpx;
 }
 
 .combo-desc {
@@ -534,5 +546,25 @@ page {
 
 .table-item:active text {
   background: #FF6B6B;
+  color: #fff;
+}
+
+.recommend-badge {
+  display: flex;
+  align-items: center;
+  padding: 4rpx 12rpx;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  border-radius: 16rpx;
+}
+
+.recommend-star {
+  font-size: 22rpx;
+  color: #fff;
+  margin-right: 4rpx;
+}
+
+.recommend-value {
+  font-size: 24rpx;
+  font-weight: bold;
   color: #fff;
 }

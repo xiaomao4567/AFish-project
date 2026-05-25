@@ -22,6 +22,7 @@ public class Combo {
     private String description;
     private BigDecimal price;
     private Integer status;
+    private Integer recommendIndex;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
 }

@@ -118,7 +118,8 @@ import {
   Bell,
   ArrowDown,
   Setting,
-  SwitchButton
+  SwitchButton,
+  ChatDotRound
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -132,7 +133,8 @@ const allMenuList = [
   { path: '/dish', title: '菜品管理', icon: Dish, roles: ['admin'] },
   { path: '/combo', title: '套餐管理', icon: Goods, roles: ['admin'] },
   { path: '/order', title: '订单管理', icon: List, roles: ['admin', 'staff'] },
-  { path: '/employee', title: '员工管理', icon: User, roles: ['admin'] }
+  { path: '/employee', title: '员工管理', icon: User, roles: ['admin'] },
+  { path: '/agent', title: 'AI客服', icon: ChatDotRound, roles: ['admin', 'staff'] }
 ]
 
 const menuList = computed(() => {
